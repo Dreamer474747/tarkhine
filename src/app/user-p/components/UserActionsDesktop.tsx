@@ -15,7 +15,7 @@ export default function UserActionsDesktop() {
 	
 	return (
 		<div
-			className="w-72 h-[342px] rounded-lg border border-[#cbcbcb] py-4 px-2 ml-6"
+			className="w-72 h-[324px] lg:h-[342px] rounded-lg border border-[#cbcbcb] py-4 px-2 ml-6"
 		>
 			<div className="flex items-center">
 				
@@ -24,9 +24,10 @@ export default function UserActionsDesktop() {
 					height="88"
 					src="/images/default-user-img.jpg"
 					alt="default-user-img"
+					className="w-[70px] h-[70px] lg:w-[88px] lg:h-[88px]"
 				/>
 				
-				<div className="mr-6 mt-5">
+				<div className="mr-4 lg--xl:mr-6 mt-5">
 					<h4 className="leading-[180%]">کاربر ترخینه</h4>
 					<p className="text-[#717171] text-xs ltr">۰۹۱۴ ۸۶۴ ۳۳۵۰</p>
 				</div>
