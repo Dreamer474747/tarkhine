@@ -8,7 +8,7 @@ const Footer = ({ isForUserP }: { isForUserP: boolean }) => {
 	
 	return (
 		<footer
-			className={`h-[480px] sm:h-[319px] rtl mt-10 ${isForUserP ? "hidden sm:block" : ""}`}
+			className={`h-[480px] sm:h-[319px] rtl mt-10 ${isForUserP ? "hidden md:block" : ""}`}
 		>
 		
 			<div

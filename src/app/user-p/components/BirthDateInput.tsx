@@ -12,7 +12,7 @@ import type { Value } from "react-multi-date-picker";
 import "react-multi-date-picker/styles/colors/green.css"
 
 
-export default function BirthDateInput() {
+export default function BirthDateInput({ canChangeData }: { canChangeData: boolean }) {
 	
 	const [value, setValue] = useState<Value>(new Date());
 	
@@ -24,8 +24,8 @@ export default function BirthDateInput() {
 	
 	return (
 		<DatePicker
-			render={<CustomInput value={value} onChange={changeHandler} />}
-			renderButton={(direction, handleClick) => (
+			render={<CustomInput value={value} onChange={changeHandler} canChangeData={canChangeData} />}
+			renderButton={(direction: any, handleClick: any) => (
 				<button className="mx-2" onClick={handleClick}>
 					{direction === "right" ? (
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +51,13 @@ export default function BirthDateInput() {
 }
 
 
-function CustomInput({ onFocus, value, onChange }: any) {
+function CustomInput({ onFocus, value, onChange, canChangeData }: any) {
   
-  return <Input className="border-text" onFocus={onFocus} value={value} onChange={onChange} />
+	return <Input
+		disabled={!canChangeData}
+		className={canChangeData ? "border-text" : ""}
+		onFocus={onFocus}
+		value={value}
+		onChange={onChange}
+	/>
 }

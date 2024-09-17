@@ -15,7 +15,7 @@ const Nav = () => {
 	
 	
 	return (
-		<nav className="h-16 sm:h-[115px] flex justify-between items-center rtl container">
+		<nav className="h-16 sm:h-[115px] flex justify-between items-center rtl container shadow-md">
 			
 			<Sidebar />
 			
