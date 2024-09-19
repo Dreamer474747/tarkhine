@@ -283,7 +283,28 @@ footer {
 	}
 }
 
+/* custom scrollbar */
 
+
+.custom-scrollbar::-webkit-scrollbar-track
+{
+	border-radius: 10px;
+	background-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar
+{
+	width: 7px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	background-color: #555;
+}
+
+
+/* custom scrollbar */
 
 
 
@@ -484,5 +505,12 @@ footer {
 	.stars {
 		width: 50px;
 		height: 14px;
+	}
+	
+	.order-header {
+		flex-direction: column;
+	}
+	.order-header h6 {
+		margin-bottom: 0.25rem;
 	}
 }

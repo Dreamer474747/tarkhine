@@ -51,7 +51,7 @@ export default function UserActions({ setShowContent }: UserActionsParams) {
 					href="/user-p"
 					className={`user-action transition
 					${pathname === "/user-p" ? "current-user-action" : ""}`}
-					onClick={() => setShowContent && setShowContent(true)}
+					onClick={() => setShowContent && pathname === "/user-p" && setShowContent(true)}
 				>
 					<svg className="ml-1" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path d="M8.00033 8.49967C5.88699 8.49967 4.16699 6.77967 4.16699 4.66634C4.16699 2.55301 5.88699 0.833008 8.00033 0.833008C10.1137 0.833008 11.8337 2.55301 11.8337 4.66634C11.8337 6.77967 10.1137 8.49967 8.00033 8.49967ZM8.00033 1.83301C6.44033 1.83301 5.16699 3.10634 5.16699 4.66634C5.16699 6.22634 6.44033 7.49967 8.00033 7.49967C9.56033 7.49967 10.8337 6.22634 10.8337 4.66634C10.8337 3.10634 9.56033 1.83301 8.00033 1.83301Z" fill="currentColor"/>
@@ -64,7 +64,7 @@ export default function UserActions({ setShowContent }: UserActionsParams) {
 					href="/user-p/order-tracking"
 					className={`user-action transition
 					${pathname === "/user-p/order-tracking" ? "current-user-action" : ""}`}
-					onClick={() => setShowContent && setShowContent(true)}
+					onClick={() => setShowContent && pathname === "/user-p/order-tracking" && setShowContent(true)}
 				>
 					<svg className="ml-1" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path d="M8.66699 6.5H4.66699C4.39366 6.5 4.16699 6.27333 4.16699 6C4.16699 5.72667 4.39366 5.5 4.66699 5.5H8.66699C8.94033 5.5 9.16699 5.72667 9.16699 6C9.16699 6.27333 8.94033 6.5 8.66699 6.5Z" fill="currentColor"/>

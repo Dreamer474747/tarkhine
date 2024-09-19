@@ -12,7 +12,7 @@ export default function ContentWrapper({ title, children }: ContentWrapperParams
 	
 	return (
 		<div
-			className="w-full h-[494px] border border-[#cbcbcb] rounded-lg p-4"
+			className="w-full h-[500px] border border-[#cbcbcb] rounded-lg p-4"
 		>
 			
 			<h2

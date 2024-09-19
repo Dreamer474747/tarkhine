@@ -11,7 +11,7 @@ import { Button } from "ui/Button";
 
 export default function Page() {
 	
-	const [showContent, setShowContent] = useState(false);
+	const [showContent, setShowContent] = useState(true);
 	
 	
 	return (
