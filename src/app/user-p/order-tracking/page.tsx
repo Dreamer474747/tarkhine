@@ -12,6 +12,8 @@ export default function OrderTracking() {
 	
 	const [showContent, setShowContent] = useState(true);
 	
+	const orders = false;
+	
 	
 	return (
 		<>
@@ -23,7 +25,7 @@ export default function OrderTracking() {
 			<div className="flex justify-items md:hidden">
 				{
 					showContent ? (
-						<div className="flex flex-col mt-4 sm:mt-0 w-full ">
+						<div className="flex flex-col mt-4 sm:mt-0 w-full">
 							<div className="flex items-center relative mb-4">
 								
 								<Button
