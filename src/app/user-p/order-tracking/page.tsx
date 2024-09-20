@@ -12,8 +12,6 @@ export default function OrderTracking() {
 	
 	const [showContent, setShowContent] = useState(true);
 	
-	const orders = false;
-	
 	
 	return (
 		<>

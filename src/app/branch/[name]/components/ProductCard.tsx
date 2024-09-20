@@ -81,7 +81,7 @@ export default function ProductCard({ src, alt, name, price, discount, rate, tot
 								width="16"
 								height="16"
 								src={`/svgs/stars/rate-${rate}.svg`}
-								alt={`{rate}-star-rate`}
+								alt={`${rate}-star-rate`}
 							/>
 							
 							<p
