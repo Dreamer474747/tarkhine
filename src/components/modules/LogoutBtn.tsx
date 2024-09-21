@@ -1,6 +1,7 @@
 "use client";
+import { EstedadSemiBold } from "@/app/Fonts";
 
-import { Button } from "ui/Button"
+import { Button } from "ui/Button";
 import {
   Dialog,
   DialogContent,
@@ -16,7 +17,7 @@ export default function LogoutBtn({ text } : { text: string }) {
 	
 	
 	return (
-		<Dialog>
+		<Dialog className="mx-4">
 		
 			<DialogTrigger asChild>
 				<Button
@@ -37,26 +38,27 @@ export default function LogoutBtn({ text } : { text: string }) {
 			
 				<DialogHeader>
 					
-					<DialogTitle className="text-center">
-						خروج از حساب
+					<DialogTitle
+						className={`text-center ${EstedadSemiBold} text-xl mb-6`}
+					>
+						خروج
 					</DialogTitle>
 					
-					<DialogDescription className="text-center text-destructive">
-						ایا واقعا میخواهید از حسابتان خارج شوید؟
+					<DialogDescription className="text-center text-text">
+						آیا مایل به خروج از حساب کاربری خود هستید؟
 					</DialogDescription>
 					
 				</DialogHeader>
 				
-				<DialogFooter>
-					<div  className="mx-auto">
+				<DialogFooter className="mt-4">
+					<div className="mx-auto *:w-[117px]">
 						<Button
-							className="mr-3"
-							variant="destructive"
+							className="mr-3 bg-[#FFF2F2] text-[#C30000]"
 						>
-							بله
+							خروج
 						</Button>
 						
-						<Button>خیر</Button>
+						<Button>بازگشت</Button>
 					</div>
 				</DialogFooter>
 				
