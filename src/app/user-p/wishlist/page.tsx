@@ -4,7 +4,7 @@ import { EstedadBold } from "@/app/Fonts";
 
 import { Button } from "ui/Button";
 
-import UserActions from "../components/UserActions";
+import UserActions from "../comps/UserActions";
 import Wishlists from "./comps/Wishlists";
 
 

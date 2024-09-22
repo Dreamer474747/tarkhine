@@ -17,7 +17,7 @@ export default function LogoutBtn({ text } : { text: string }) {
 	
 	
 	return (
-		<Dialog className="mx-4">
+		<Dialog>
 		
 			<DialogTrigger asChild>
 				<Button

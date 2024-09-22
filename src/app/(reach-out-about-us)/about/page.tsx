@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-import AboutUs from "./components/AboutUs";
-import Features from "./components/Features";
+import AboutUs from "./comps/AboutUs";
+import Features from "./comps/Features";
 
 import Footer from "m/footer/Footer";
 import Nav from "m/nav/Nav";
@@ -36,7 +36,7 @@ export default function Page() {
 				
 			</main>
 			
-			<Footer isForUserP={false} />
+			<Footer hiddenInLowerWidth={false} />
 		</>
 	)
 }

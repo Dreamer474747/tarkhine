@@ -1,6 +1,6 @@
 import Footer from "m/footer/Footer";
 import Nav from "m/nav/Nav";
-import Branch from "./components/Branch";
+import Branch from "./comps/Branch";
 
 import { EstedadBold } from "@/app/Fonts";
 
@@ -74,7 +74,7 @@ export default function Page() {
 				
 			</main>
 			
-			<Footer isForUserP={false} />
+			<Footer hiddenInLowerWidth={false} />
 		</>
 	)
 }

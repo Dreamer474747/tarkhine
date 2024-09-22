@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { EstedadBold } from "@/app/Fonts";
 
-import UserActions from "./components/UserActions";
-import PersonalDataForm from "./components/PersonalDataForm";
-import ContentWrapper from "./components/ContentWrapper";
+import UserActions from "./comps/UserActions";
+import PersonalDataForm from "./comps/PersonalDataForm";
+import ContentWrapper from "./comps/ContentWrapper";
 
 import { Button } from "ui/Button";
 

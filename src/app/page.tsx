@@ -9,7 +9,7 @@ export default function Home() {
 		<>
 			<Header />
 			<Main />
-			<Footer isForUserP={false} />
+			<Footer hiddenInLowerWidth={false} />
 		</>
 	);
 }

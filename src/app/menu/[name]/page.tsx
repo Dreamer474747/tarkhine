@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import Header from "../components/Header";
-import MenuItems from "../components/MenuItems";
-import MenuLinkItems from "../components/MenuLinkItems";
+import Header from "../comps/Header";
+import MenuItems from "../comps/MenuItems";
+import MenuLinkItems from "../comps/MenuLinkItems";
 
 import Footer from "m/footer/Footer";
 
@@ -31,7 +31,7 @@ export default function Page({ params }: PageParamsType) {
 				
 			</main>
 			
-			<Footer isForUserP={false} />
+			<Footer hiddenInLowerWidth={false} />
 		</>
 	)
 }

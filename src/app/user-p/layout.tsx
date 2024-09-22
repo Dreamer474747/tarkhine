@@ -16,7 +16,7 @@ export default function UserLayout ({ children }: { children: React.ReactNode })
 				{children}
 			</main>
 			
-			<Footer isForUserP={true} />
+			<Footer hiddenInLowerWidth={true} />
 		</>
 	)
 }

@@ -4,7 +4,7 @@ import Footer from "m/footer/Footer";
 import Nav from "m/nav/Nav";
 import GuidelinesAndProtectionsLinks
 from "m/guidelines-and-protections-links/GuidelinesAndProtectionsLinks";
-import QuestionsAndAnswers from "./components/QuestionsAndAnswers";
+import QuestionsAndAnswers from "./comps/QuestionsAndAnswers";
 
 import { EstedadBold } from "@/app/Fonts";
 
@@ -37,7 +37,7 @@ export default function Page() {
 				
 			</main>
 			
-			<Footer isForUserP={false} />
+			<Footer hiddenInLowerWidth={false} />
 		</>
 	)
 }

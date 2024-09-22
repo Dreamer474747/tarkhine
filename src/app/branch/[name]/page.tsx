@@ -5,9 +5,9 @@ import Header from "m/header/Header";
 import SearchInput from "m/SearchInput";
 import Footer from "m/footer/Footer";
 
-import FoodCarousel from "./components/FoodCarousel";
-import BranchInfo from "./components/BranchInfo";
-import Comments from "./components/Comments";
+import FoodCarousel from "./comps/FoodCarousel";
+import BranchInfo from "./comps/BranchInfo";
+import Comments from "./comps/Comments";
 
 import { EstedadBold, EstedadMedium } from "@/app/Fonts";
 
@@ -84,7 +84,7 @@ export default function Page({ params }: PageParamsType) {
 				
 			</main>
 			
-			<Footer isForUserP={false} />
+			<Footer hiddenInLowerWidth={false} />
 		</>
 	)
 }

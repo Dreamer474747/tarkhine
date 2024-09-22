@@ -4,11 +4,11 @@ import Form from "./Form";
 
 
 
-const Footer = ({ isForUserP }: { isForUserP: boolean }) => {
+const Footer = ({ hiddenInLowerWidth }: { hiddenInLowerWidth: boolean }) => {
 	
 	return (
 		<footer
-			className={`h-[480px] sm:h-[319px] rtl mt-10 ${isForUserP ? "hidden md:block" : ""}`}
+			className={`h-[480px] sm:h-[319px] rtl mt-10 ${hiddenInLowerWidth ? "hidden md:block" : ""}`}
 		>
 		
 			<div

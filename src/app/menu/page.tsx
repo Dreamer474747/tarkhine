@@ -6,7 +6,7 @@ FilterOptions,
 SearchInput,
 MenuProductCard,
 MenuItems
-} from "./components";
+} from "./comps";
 import Footer from "m/footer/Footer";
 
 import { EstedadBold, EstedadMedium } from "@/app/Fonts";
@@ -97,7 +97,7 @@ export default function Page({ params }: PageParamsType) {
 				
 			</main>
 			
-			<Footer isForUserP={false} />
+			<Footer hiddenInLowerWidth={false} />
 		</>
 	)
 }

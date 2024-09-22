@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { EstedadBold } from "@/app/Fonts";
 
-import UserActions from "../components/UserActions";
+import UserActions from "../comps/UserActions";
 import Orders from "./comps/Orders";
 
 import { Button } from "ui/Button";
