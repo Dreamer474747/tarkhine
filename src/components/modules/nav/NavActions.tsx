@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-import UserAuthBtn from "./UserAuthBtn";
+import UserAuth from "./UserAuth";
 import { Button } from "ui/Button";
 
 
@@ -41,7 +41,7 @@ const NavActions = () => {
 				</Link>
 			</li>
 			
-			<UserAuthBtn />
+			<UserAuth />
 			
 		</ul>
 	)
