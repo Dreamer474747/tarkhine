@@ -5,11 +5,11 @@ import Header from "m/header/Header";
 import SearchInput from "m/SearchInput";
 import Footer from "m/footer/Footer";
 
-import FoodCarousel from "./comps/FoodCarousel";
+import FoodSections from "./comps/FoodSections";
 import BranchInfo from "./comps/BranchInfo";
 import Comments from "./comps/Comments";
 
-import { EstedadBold, EstedadMedium } from "@/app/Fonts";
+import { EstedadMedium } from "@/app/Fonts";
 
 type PageParamsType = {
 	params: { name: string }
@@ -27,41 +27,7 @@ export default function Page({ params }: PageParamsType) {
 				
 				<SearchInput />
 				
-				<section className="pb-8 lg:py-12">
-					<h4
-						className={`text-base sm:text-xl lg:text-2xl leading-[140%] ${EstedadBold}
-						mb-5 container`}
-					>
-						پیشنهاد ویژه
-					</h4>
-					
-					<FoodCarousel isSpecial={false} />
-					
-				</section>
-				
-				<section className="pt-6 pb-6 lg:pb-10 bg-[#315F41]">
-					<h4
-						className={`text-base sm:text-xl lg:text-2xl leading-[140%] ${EstedadBold}
-						mb-5 container text-white`}
-					>
-						غذاهای محبوب
-					</h4>
-					
-					<FoodCarousel isSpecial={true} />
-					
-				</section>
-				
-				<section className="py-8 lg:py-12">
-					<h4
-						className={`text-base sm:text-xl lg:text-2xl leading-[140%] ${EstedadBold}
-						mb-5 container`}
-					>
-						غذاهای غیر ایرانی
-					</h4>
-					
-					<FoodCarousel isSpecial={false} />
-					
-				</section>
+				<FoodSections />
 				
 				<Link
 					href="/menu"

@@ -18,7 +18,7 @@ const Branch = ({ src, alt, name, address }: BranchParams) => {
 			sm:mx-4 lg--xl:mx-0`}
 		>
             <div
-				className={`absolute top-0 sm:cursor-pointer w-full flex flex-row-reverse
+				className={`absolute top-0 w-full flex flex-row-reverse
 				sm:flex-row`}
 			>
                 <Image
@@ -46,9 +46,9 @@ const Branch = ({ src, alt, name, address }: BranchParams) => {
 					
 				</div>
 				
-                <div
+                {/* <div
                     className={`absolute z-10 top-0 left-0 right-0 mx-auto hidden sm:flex
-					justify-center items-center h-[228px] card-img-icon`}
+					justify-center items-center h-[228px] card-img-icon `}
                 >
                     <div className="absolute">
                         <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +75,8 @@ const Branch = ({ src, alt, name, address }: BranchParams) => {
                             <path d="M3.56035 26.2667C3.24035 26.2667 2.92035 26.1067 2.73368 25.8267C2.42701 25.3734 2.54701 24.7467 3.01368 24.44L9.58701 20.0267C11.027 19.0534 13.0137 19.1734 14.3203 20.28L14.7603 20.6667C15.427 21.24 16.5603 21.24 17.2137 20.6667L22.7603 15.9067C24.1737 14.6934 26.4003 14.6934 27.827 15.9067L30.0003 17.7734C30.4137 18.1334 30.467 18.76 30.107 19.1867C29.747 19.6 29.1203 19.6534 28.6937 19.2934L26.5203 17.4267C25.8537 16.8534 24.7203 16.8534 24.0537 17.4267L18.507 22.1867C17.0937 23.4 14.867 23.4 13.4403 22.1867L13.0003 21.8C12.387 21.28 11.3737 21.2267 10.6937 21.6934L4.12035 26.1067C3.94701 26.2134 3.74701 26.2667 3.56035 26.2667Z" fill="#F9F9F9"/>
                         </svg>
                     </div>
-                </div>
+                </div> */}
+				
             </div>
             
             <div

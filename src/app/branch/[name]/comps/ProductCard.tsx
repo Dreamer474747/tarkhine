@@ -58,20 +58,24 @@ export default function ProductCard({ src, alt, name, price, discount, rate, tot
 							</p>
 						</div>
 						
-						<div className="text-[10px] leading-[180%] flex">
-							<p
-								className="line-through text-[#adadad] ml-2"
-							>
-								{toPersianNumber(price.toLocaleString())}
-							</p>
-							
-							<Badge
-								className={`bg-[#fff2f2] text-[#c30000] w-8 h-4 flex justify-items
-								text-[10px] leading-[180%] pt-1 hover:bg-[#fff2f2]`}
-							>
-								٪{toPersianNumber(discount)}
-							</Badge>
-						</div>
+						{
+							discount > 0 && (
+								<div className="text-[10px] leading-[180%] flex">
+									<p
+										className="line-through text-[#adadad] ml-2"
+									>
+										{toPersianNumber(price.toLocaleString())}
+									</p>
+									
+									<Badge
+										className={`bg-[#fff2f2] text-[#c30000] w-8 h-4 flex justify-items
+										text-[10px] leading-[180%] pt-1 hover:bg-[#fff2f2]`}
+									>
+										٪{toPersianNumber(discount)}
+									</Badge>
+								</div>
+							)
+						}
 					</div>
 					
 					<div className="flex justify-between items-center">

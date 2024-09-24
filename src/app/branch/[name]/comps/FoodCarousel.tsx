@@ -8,12 +8,18 @@ import {
   CarouselPrevious
 } from "ui/Carousel";
 
+import type { Product } from "u/types";
 
-export default function FoodCarousel({ isSpecial }: { isSpecial: boolean }) {
+type FoodCarouselParams = {
+	isSpecial: boolean,
+	products: Product[]
+}
+
+
+export default function FoodCarousel({ isSpecial, products }: FoodCarouselParams) {
 	
 	
-	
-	const products = [
+	const productsz = [
 		{
 			src: "/images/dolme-barg-kalam.jpg",
 			alt: "dolme-barg-kalam",
@@ -74,19 +80,19 @@ export default function FoodCarousel({ isSpecial }: { isSpecial: boolean }) {
 			<CarouselContent className="-ml-5 ml-3">
 				
 				{
-					products.map((product, index) => (
+					products?.map((product, index) => (
 						<CarouselItem
 							key={index}
 							className="basis-[unset] pl-5 [&>div]:bg-white"
 						>
 							<ProductCard
-								src={product.src}
-								alt={product.alt}
-								name={product.name}
-								price={product.price}
-								discount={product.discount}
-								rate={product.rate}
-								totalRate={product.totalRate}
+								src={product.photo}
+								alt={product.title}
+								name={product.title}
+								price={+(product.price)}
+								discount={0}
+								rate={4}
+								totalRate={3}
 								specialProduct={isSpecial}
 							/>
 						</CarouselItem>

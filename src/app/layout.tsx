@@ -4,6 +4,8 @@ import "./globals.css";
 
 import { EstedadRegular } from "./Fonts";
 
+import ProductsProvider from "@/components/contexts/ProductsProvider";
+
 
 export const metadata: Metadata = {
   title: "Tarkhine",
@@ -18,7 +20,9 @@ export default function RootLayout({
 	return (
 		<html lang="fa">
 			<body className={`${EstedadRegular} text-text`}>
-				{children}
+				<ProductsProvider>
+					{children}
+				</ProductsProvider>
 			</body>
 		</html>
 	);
