@@ -4,8 +4,15 @@ import MenuProductCard from "./MenuProductCard";
 
 import { EstedadBold } from "@/app/Fonts";
 
+import { Product } from "u/types";
 
-export default function MenuItems({ title }: { title: string }) {
+type MenuItemsParams = {
+	title: string,
+	products: Product[]
+}
+
+
+export default function MenuItems({ title, products }: MenuItemsParams) {
 	
 	
 	return (
@@ -22,16 +29,16 @@ export default function MenuItems({ title }: { title: string }) {
 				className="flex justify-between flex-wrap menu-cards"
 			>
 				{
-					Array.from({ length: 4 }).map((product, index) => (
+					products?.map((product, index) => (
 						<MenuProductCard
 							key={index}
-							src="/images/kashk.jpg"
-							alt="kashk-e-baademjaan"
-							name="کشک بادمجان"
-							ingredients="برنج سبزی کوفته لپه آرد نخودچی، گردو و زرشک و آلو پیاز"
-							price={180_000}
-							discount={35}
-							rate={5}
+							src={product.photo}
+							alt={product.title}
+							name={product.title}
+							ingredients={product.description}
+							price={+product.price}
+							discount={product.discount}
+							rate={product.rate}
 						/>
 					))
 				}

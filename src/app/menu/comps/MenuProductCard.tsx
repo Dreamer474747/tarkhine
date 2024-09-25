@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { toPersianNumber } from "u/helpers";
+import { priceCalculator, toPersianNumber } from "u/helpers";
 import { EstedadMedium, EstedadSemiBold } from "@/app/Fonts";
 
 import { Badge } from "ui/Badge";
@@ -12,7 +12,7 @@ type MenuProductCardParams = {
 	name: string,
 	ingredients: string,
 	price: number,
-	discount: number,
+	discount: number | null,
 	rate: number,
 }
 
@@ -51,7 +51,7 @@ export default function MenuProductCard({ src, alt, name, ingredients, price, di
 						<path className="transition" d="M12 21.65C11.69 21.65 11.39 21.61 11.14 21.52C7.32 20.21 1.25 15.56 1.25 8.68998C1.25 5.18998 4.08 2.34998 7.56 2.34998C9.25 2.34998 10.83 3.00998 12 4.18998C13.17 3.00998 14.75 2.34998 16.44 2.34998C19.92 2.34998 22.75 5.19998 22.75 8.68998C22.75 15.57 16.68 20.21 12.86 21.52C12.61 21.61 12.31 21.65 12 21.65ZM7.56 3.84998C4.91 3.84998 2.75 6.01998 2.75 8.68998C2.75 15.52 9.32 19.32 11.63 20.11C11.81 20.17 12.2 20.17 12.38 20.11C14.68 19.32 21.26 15.53 21.26 8.68998C21.26 6.01998 19.1 3.84998 16.45 3.84998C14.93 3.84998 13.52 4.55998 12.61 5.78998C12.33 6.16998 11.69 6.16998 11.41 5.78998C10.48 4.54998 9.08 3.84998 7.56 3.84998Z" fill="#717171"/>
 					</svg>
 					
-					{ discount > 0 && (
+					{ discount && (
 							<div
 								className={`md:hidden flex items-center justify-end
 								leading-[180%]`}
@@ -84,7 +84,7 @@ export default function MenuProductCard({ src, alt, name, ingredients, price, di
 					
 					<div className="price">
 						{
-							discount > 0 && (
+							discount && (
 								<div className=" hidden md:flex items-center justify-end">
 									<p
 										className="line-through text-[#adadad] ml-2"
@@ -106,7 +106,9 @@ export default function MenuProductCard({ src, alt, name, ingredients, price, di
 							className={`text-xs sm:text-sm md:text-lg xl:text-base xl--2xl:text-lg
 							leading-[180%] ${EstedadMedium}`}
 						>
-							{toPersianNumber((price * ((100 - discount) / 100)).toLocaleString())}
+							{
+								priceCalculator(price, discount)
+							}
 							{" "}
 							تومان
 						</p>

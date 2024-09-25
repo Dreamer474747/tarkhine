@@ -1,9 +1,7 @@
 "use client";
 import { createContext, useState, useEffect } from "react";
 
-import type { Product } from "u/types";
-
-import type { ProductsContextType } from "u/types";
+import type { Product, ProductsContextType } from "u/types";
 
 
 export const ProductsContext = createContext<ProductsContextType | null>(null)
@@ -28,6 +26,7 @@ export default function ProductsProvider({ children }: { children: React.ReactNo
 			
 			const iranianFoods = data.filter((food: Product) => food.food_subcategory.title === "غذا های ایرانی");
 			setIranianProducts(iranianFoods);
+			
 		}
 		
 		getProducts();
@@ -35,7 +34,7 @@ export default function ProductsProvider({ children }: { children: React.ReactNo
 	
 	
 	return (
-		<ProductsContext.Provider value={{ products, nonIranianProducts }}>
+		<ProductsContext.Provider value={{ products, nonIranianProducts, iranianProducts }}>
 			{children}
 		</ProductsContext.Provider>
 	)

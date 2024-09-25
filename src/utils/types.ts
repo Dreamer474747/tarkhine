@@ -11,11 +11,13 @@ type Product = {
 	price: string,
 	product_code: string,
 	title: string,
+	rate: number
 }
 
 type ProductsContextType = {
 	products: Product[],
-	nonIranianProducts: Product[]
+	nonIranianProducts: Product[],
+	iranianProducts: Product[],
 }
 
 export type { Product, ProductsContextType }

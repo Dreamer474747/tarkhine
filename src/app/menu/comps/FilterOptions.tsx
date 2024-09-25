@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import FilterOption from "./FilterOption";
 
@@ -11,15 +11,24 @@ import {
   CarouselPrevious
 } from "ui/Carousel";
 
+type FilterOptionsParams = {
+	isIranianFood: boolean,
+	setIsIranianFood: Dispatch<SetStateAction<boolean>>,
+	isNonIranianFood: boolean,
+	setIsNonIranianFood: Dispatch<SetStateAction<boolean>>,
+	isPizza: boolean,
+	setIsPizza: Dispatch<SetStateAction<boolean>>,
+	isSandwich: boolean,
+	setIsSandwich: Dispatch<SetStateAction<boolean>>,
+	isBestSeller: boolean,
+	setIsBestSeller: Dispatch<SetStateAction<boolean>>,
+	isMostEconomical: boolean,
+	setIsMostEconomical: Dispatch<SetStateAction<boolean>>,
+}
 
-export default function FilterOptions() {
-	
-	const [isIranianFood, setIsIranianFood] = useState(false);
-	const [isNotIranianFood, setIsNotIranianFood] = useState(false);
-	const [isPizza, setIsPizza] = useState(false);
-	const [isSandwich, setIsSandwich] = useState(false);
-	const [bestSeller, setBestSeller] = useState(false);
-	const [mostEconomical, setMostEconomical] = useState(false);
+
+export default function FilterOptions({ isIranianFood, setIsIranianFood, isNonIranianFood, setIsNonIranianFood, isPizza, setIsPizza,
+isSandwich, setIsSandwich, isBestSeller, setIsBestSeller, isMostEconomical, setIsMostEconomical }: FilterOptionsParams) {
 	
 	
 	return (
@@ -39,8 +48,8 @@ export default function FilterOptions() {
 				/>
 				<FilterOption
 					text="غذاهای غیر ایرانی"
-					state={isNotIranianFood}
-					setState={setIsNotIranianFood}
+					state={isNonIranianFood}
+					setState={setIsNonIranianFood}
 				/>
 				<FilterOption
 					text="پیتزاها"
@@ -54,13 +63,13 @@ export default function FilterOptions() {
 				/>
 				<FilterOption
 					text="پرفروش‌ترین"
-					state={bestSeller}
-					setState={setBestSeller}
+					state={isBestSeller}
+					setState={setIsBestSeller}
 				/>
 				<FilterOption
 					text="اقتصادی‌ترین"
-					state={mostEconomical}
-					setState={setMostEconomical}
+					state={isMostEconomical}
+					setState={setIsMostEconomical}
 				/>
 				
 			</CarouselContent>

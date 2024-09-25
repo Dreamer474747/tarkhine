@@ -25,4 +25,18 @@ const toPersianNumber = (n: string | number) => {
 		.replace(/\d/g, (x: any) => farsiDigits[x]);
 }
 
-export { getCurrentBranchName, toPersianNumber };
+const priceCalculator = (price: number, discount: number | null) => {
+	
+	if (discount) {
+		const countedPercent = (100 - discount) / 100;
+		const finalPrice = price * countedPercent;
+		
+		return toPersianNumber(finalPrice.toLocaleString());
+		
+	} else {
+		return toPersianNumber(price.toLocaleString());
+	}
+	
+}
+
+export { getCurrentBranchName, toPersianNumber, priceCalculator };
