@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import MenuProductCard from "./MenuProductCard";
+import MenuProductCard from "m/productCards/MenuProductCard";
 
 import { EstedadBold } from "@/app/Fonts";
 

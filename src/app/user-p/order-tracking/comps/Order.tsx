@@ -1,4 +1,4 @@
-import Product from "./Product";
+import OrderTrackingProduct from "m/productCards/OrderTrackingProduct";
 
 import { toPersianNumber } from "u/helpers";
 
@@ -167,7 +167,7 @@ export default function Order(
 								key={index}
 								className="basis-[unset] pl-1"
 							>
-								<Product
+								<OrderTrackingProduct
 									src="/images/kookoo.jpg"
 									alt="kookoo-sabzi"
 									count={3}

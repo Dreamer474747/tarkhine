@@ -24,12 +24,10 @@ type PageParamsType = {
 export default function Page({ params }: PageParamsType) {
 	
 	const pathname = usePathname();
-	console.log(pathname)
 	const { products } = useContext(ProductsContext) as ProductsContextType;
-	console.log(products)
 	
 	let menuTitle = "";
-	let allProducts = [];
+	let allProducts: Product[] = [];
 	
 	if (pathname === "/menu/main-dish") {
 		allProducts = products.filter((product: Product) => product.food_category.title === "غذای اصلی")

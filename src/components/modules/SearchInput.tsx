@@ -1,13 +1,35 @@
+"use client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { Input } from "ui/Input";
 import { Button } from "ui/Button";
 
 
 const SearchInput = () => {
 	
+	const router = useRouter();
+	
+	const [searchValue, setSearchValue] = useState("");
+	
+	const search = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		
+		router.replace(`/${searchValue}`);
+	}
+	
 	
 	return (
-		<form className="max-w-2xl container lg:hidden relative my-6 rtl">
-			<Input placeholder="جستجو" className="pl-11" />
+		<form
+			className="max-w-2xl container lg:hidden relative my-6 rtl"
+			onSubmit={search}
+		>
+			<Input
+				value={searchValue}
+				onChange={(e) => setSearchValue(e.target.value)}
+				placeholder="جستجو"
+				className="pl-11"
+			/>
 			
 			<Button
 				className="absolute left-7 top-0 flex justify-items bg-transparent hover:bg-transparent"

@@ -11,7 +11,7 @@ type ProductParams = {
 }
 
 
-export default function Product({ src, alt, count, name, price }: ProductParams) {
+export default function OrderTrackingProduct({ src, alt, count, name, price }: ProductParams) {
 	
 	
 	return (

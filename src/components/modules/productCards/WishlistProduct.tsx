@@ -15,7 +15,7 @@ type ProductParams = {
 }
 
 
-export default function Product({ src, alt, name, price, rate }: ProductParams) {
+export default function WishlistProduct({ src, alt, name, price, rate }: ProductParams) {
 	
 	
 	return (

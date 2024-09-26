@@ -12,7 +12,7 @@ type ProductCardParams = {
 	alt: string,
 	name: string,
 	price: number,
-	discount: number,
+	discount: number | null,
 	rate: number,
 	totalRate: number,
 	specialProduct: boolean
@@ -59,7 +59,7 @@ export default function ProductCard({ src, alt, name, price, discount, rate, tot
 						</div>
 						
 						{
-							discount > 0 && (
+							discount && (
 								<div className="text-[10px] leading-[180%] flex">
 									<p
 										className="line-through text-[#adadad] ml-2"
@@ -103,7 +103,8 @@ export default function ProductCard({ src, alt, name, price, discount, rate, tot
 						<p
 							className={`text-[10px] sm:text-sm md:text-base leading-[180%] ${EstedadMedium}`}
 						>
-							{toPersianNumber((price * ((100 - discount) / 100)).toLocaleString())}
+							{discount ? toPersianNumber((price * ((100 - discount) / 100)).toLocaleString())
+							: toPersianNumber(price.toLocaleString())}
 							{" "}
 							تومان
 						</p>

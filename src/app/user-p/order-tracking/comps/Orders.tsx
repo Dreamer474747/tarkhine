@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ScrollArea } from "ui/ScrollArea";
 import { Separator } from "ui/Separator";
 
-import Product from "./Product";
+import OrderTrackingProduct from "m/productCards/OrderTrackingProduct";
 
 import {
   Carousel,

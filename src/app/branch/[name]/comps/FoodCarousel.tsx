@@ -1,4 +1,4 @@
-import ProductCard from "./ProductCard";
+import ProductCard from "m/productCards/ProductCard";
 
 import {
   Carousel,
@@ -19,53 +19,7 @@ type FoodCarouselParams = {
 export default function FoodCarousel({ isSpecial, products }: FoodCarouselParams) {
 	
 	
-	const productsz = [
-		{
-			src: "/images/dolme-barg-kalam.jpg",
-			alt: "dolme-barg-kalam",
-			name: "دلمه برگ کلم",
-			price: 220_000,
-			discount: 8,
-			rate: 5,
-			totalRate: 52
-		},
-		{
-			src: "/images/dolme-barg-kalam.jpg",
-			alt: "dolme-barg-kalam",
-			name: "دلمه برگ کلم",
-			price: 220_000,
-			discount: 8,
-			rate: 5,
-			totalRate: 52
-		},
-		{
-			src: "/images/dolme-barg-kalam.jpg",
-			alt: "dolme-barg-kalam",
-			name: "دلمه برگ کلم",
-			price: 220_000,
-			discount: 8,
-			rate: 5,
-			totalRate: 52
-		},
-		{
-			src: "/images/dolme-barg-kalam.jpg",
-			alt: "dolme-barg-kalam",
-			name: "دلمه برگ کلم",
-			price: 220_000,
-			discount: 8,
-			rate: 5,
-			totalRate: 52
-		},
-		{
-			src: "/images/dolme-barg-kalam.jpg",
-			alt: "dolme-barg-kalam",
-			name: "دلمه برگ کلم",
-			price: 220_000,
-			discount: 8,
-			rate: 5,
-			totalRate: 52
-		},
-	]
+	
 	
 	
 	return (

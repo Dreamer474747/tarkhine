@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ScrollArea } from "ui/ScrollArea";
 import { Separator } from "ui/Separator";
 
-import Product from "./Product";
+import WishlistProduct from "m/productCards/WishlistProduct";
 
 import { EstedadSemiBold, EstedadMedium } from "@/app/Fonts";
 
@@ -68,7 +68,7 @@ export default function Wishlists() {
 			<div className="flex justify-around md:justify-between flex-wrap">
 				{
 					wishlists.length ?  wishlists.map((product, index) => (
-						<Product
+						<WishlistProduct
 							key={index}
 							src={product.src}
 							alt={product.alt}

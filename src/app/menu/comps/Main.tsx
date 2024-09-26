@@ -6,11 +6,11 @@ import { useContext, useState, useMemo, useEffect } from "react";
 import { ProductsContext } from "@/components/contexts/ProductsProvider";
 import type { ProductsContextType, Product } from "u/types";
 
+import MenuProductCard from "m/productCards/MenuProductCard";
 import {
 MenuLinkItems,
 FilterOptions,
 SearchInput,
-MenuProductCard,
 MenuItems
 } from ".";
 
