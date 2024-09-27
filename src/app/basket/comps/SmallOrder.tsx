@@ -1,15 +1,49 @@
+"use client";
+import { useState } from "react";
+
 import { Button } from "ui/Button";
-import { toPersianNumber } from "u/helpers";
+import { priceCalculator, toPersianNumber } from "u/helpers";
 
 type SmallOrderParams = {
 	name: string,
 	price: number,
-	numberOfOrders: number
+	discount: number,
+	numberOfOrders: number,
 }
 
 
 
-export default function SmallOrder({ name, price, numberOfOrders }: SmallOrderParams) {
+export default function SmallOrder({ name, price, discount, numberOfOrders }: SmallOrderParams) {
+	
+	const [localCount, setLocalCount] = useState(numberOfOrders);
+	
+	const addProductCount = () => {
+		let cart = JSON.parse(localStorage.getItem("cart")) || [];
+		
+		cart.forEach((item: any) => {
+			if (item.name === name) {
+				item.count = item.count + 1
+			}
+		})
+		
+		localStorage.setItem("cart", JSON.stringify(cart) || "[]");
+		
+		setLocalCount(localCount + 1)
+	}
+	
+	const subtractProductCount = () => {
+		let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+		
+		cart.forEach((item: any) => {
+			if (item.name === name) {
+				item.count = item.count - 1
+			}
+		})
+		
+		localStorage.setItem("cart", JSON.stringify(cart));
+		
+		setLocalCount(localCount - 1);
+	}
 	
 	
 	return (
@@ -22,7 +56,7 @@ export default function SmallOrder({ name, price, numberOfOrders }: SmallOrderPa
 				</h6>
 				
 				<p className="text-[#717171] ">
-					{toPersianNumber(price.toLocaleString())}
+					{priceCalculator(price, discount)}
 					{" "}
 					تومان
 				</p>
@@ -33,14 +67,16 @@ export default function SmallOrder({ name, price, numberOfOrders }: SmallOrderPa
 			>
 				<Button
 					className="text-xl text-primary bg-transparent hover:bg-transparent p-0 m-0"
+					onClick={addProductCount}
 				>+</Button>
 				
 				<span className="text-sm">
-					{toPersianNumber(numberOfOrders)}
+					{toPersianNumber(localCount)}
 				</span>
 				
 				<Button
 					className="text-xl text-primary bg-transparent hover:bg-transparent p-0 m-0"
+					onClick={subtractProductCount}
 				>
 					{
 						numberOfOrders === 1 ? (

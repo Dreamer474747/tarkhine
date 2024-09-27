@@ -40,21 +40,41 @@ export default function LoginOrRegisterBtn() {
 				setOptCode("");
 			}
 		}
-	})
+	}, []);
 	
 	
 	const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
 	
-	useEffect(() => {
+	const emailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		
-		const isEmailValid = email.match(emailRegex);
+		setEmail(event.target.value);
+		
+		const isEmailValid = event.target.value.match(emailRegex);
 		if (isEmailValid) {
 			setIsEmailEntered(true);
 		} else {
 			setIsEmailEntered(false);
 		}
+	}
+	
+	const signInOrRegister = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
 		
-	}, [email])
+		const res = await fetch(`${process.env.BASE_URL}/auth/login/`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ email, password: "12345678" })
+		})
+		
+		console.log(res)
+		
+		const data = await res.json();
+		console.log(data)
+		
+		// setIsOtpSent(true);
+	}
 	
 	
 	return (
@@ -163,14 +183,14 @@ export default function LoginOrRegisterBtn() {
 										className="h-4 bg-white hover:bg-white text-primary text-xs p-0 m-0"
 										onClick={() => setIsOtpSent(false)}
 									>
-										ویرایش شماره
+										ویرایش ایمیل
 									</Button>
 								</div>
 								
 								<form>
 									<Button
 										className="w-full mt-4"
-										disabled={true}
+										disabled={optCode.length !== 5}
 									>
 										ثبت کد
 									</Button>
@@ -178,17 +198,22 @@ export default function LoginOrRegisterBtn() {
 							</div>
 						) : (
 							<div className="flex flex-col items-center w-full">
-								<form className="w-full">
+								<form
+									className="w-full"
+									onSubmit={signInOrRegister}
+								>
 									
 									<div className="relative">
 										<Input
 											placeholder="ایمیل"
 											type="email"
 											value={email}
-											onChange={(e) => setEmail(e.target.value)}
+											onChange={emailHandler}
 										/>
 										
-										<span className="absolute text-xs -top-[11px] right-4 bg-white px-0.5">
+										<span
+											className="absolute text-xs -top-[10.5px] right-4 bg-white px-0.5"
+											>
 											ایمیل
 										</span>
 									</div>
@@ -196,7 +221,6 @@ export default function LoginOrRegisterBtn() {
 									<Button
 										className="w-full mt-3"
 										disabled={!isEmailEntered}
-										onClick={() => setIsOtpSent(true)}
 									>
 										ادامه
 									</Button>

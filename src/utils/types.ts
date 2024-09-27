@@ -11,7 +11,8 @@ type Product = {
 	price: string,
 	product_code: string,
 	title: string,
-	rate: number
+	rate: number,
+	count?: number
 }
 
 type ProductsContextType = {

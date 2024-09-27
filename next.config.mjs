@@ -6,7 +6,7 @@ const nextConfig = {
 	images: {
 		remotePatterns: [
 			{
-				protocol: 'http',
+				protocol: 'https',
 				hostname: 'tarkhineh.armin-kosari.ir',
 				port: '',
 				pathname: '/media/Product-Images/**'

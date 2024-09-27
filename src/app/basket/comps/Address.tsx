@@ -3,7 +3,7 @@ import { Separator } from "ui/Separator";
 
 
 
-export default function Adress() {
+export default function Address() {
 	
 	
 	const flag = true;

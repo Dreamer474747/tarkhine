@@ -37,7 +37,7 @@ export default function MenuItems({ title, products }: MenuItemsParams) {
 							name={product.title}
 							ingredients={product.description}
 							price={+product.price}
-							discount={product.discount}
+							discount={product.discount ? product.discount : 0}
 							rate={product.rate}
 						/>
 					))
