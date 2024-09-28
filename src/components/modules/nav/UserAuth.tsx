@@ -1,17 +1,53 @@
 "use client";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 import { Button } from "ui/Button";
 import LogoutBtn from "m/LogoutBtn";
 import LoginOrRegisterBtn from "./LoginOrRegisterBtn";
 
+import { getCookie, setCookie, hasCookie } from "cookies-next";
+
 
 export default function UserAuth() {
 	
-	const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 	const pathname = usePathname();
+	const router = useRouter();
+	
+	const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+	let firstRender = true;
+	
+	
+	const refreshMyAccessToken = async () => {
+		
+		const res = await fetch(`${process.env.BASE_URL}/auth/token/refresh/`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ refresh: getCookie("refresh") })
+		});
+		
+		if (res.status === 200) {
+			const data = await res.json();
+			setCookie("token", data.access, { maxAge: 60 });
+			router.refresh();
+		}
+	}
+	
+	useEffect(() => {
+		
+		setIsUserLoggedIn(hasCookie("token"));
+		
+		if (firstRender) {
+			firstRender = false;
+			
+		} else if (!firstRender && !isUserLoggedIn) {
+			refreshMyAccessToken();
+		}
+	})
+	
 	
 	return (
 		<>

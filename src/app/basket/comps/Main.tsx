@@ -6,7 +6,7 @@ import { EstedadMedium } from "@/app/Fonts";
 
 import { EmptyBasket, OrderInfo, LargeOrder, SmallOrder, Address } from ".";
 
-import type { Product } from "u//types";
+import type { Product } from "u/types";
 
 
 export default function Main() {
@@ -30,7 +30,7 @@ export default function Main() {
 								hidden lg:block`}
 							>
 								{
-									cart?.map((product: Product) => (
+									cart?.map((product: any) => (
 										<LargeOrder
 											key={product.name}
 											src={product.src}
@@ -52,7 +52,7 @@ export default function Main() {
 								lg:hidden max-h-[400px] md:max-h-[unset]`}
 							>
 								{
-									cart?.map((product: Product) => (
+									cart?.map((product: {name: string, price: number, discount: number | null, count: number}) => (
 										<SmallOrder
 											key={product.name}
 											name={product.name}

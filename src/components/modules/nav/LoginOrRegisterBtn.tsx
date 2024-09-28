@@ -1,16 +1,16 @@
 "use client";
+import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 
 import { useState, useEffect } from "react";
 
-import Image from "next/image";
 import { EstedadSemiBold } from "@/app/Fonts";
+
+import { setCookie, getCookie } from "cookies-next";
 
 import { Button } from "ui/Button";
 import { Input } from "ui/Input";
-
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "ui/InputOTP";
-
 import {
   Dialog,
   DialogContent,
@@ -21,59 +21,79 @@ import {
   DialogTrigger,
 } from "ui/Dialog";
 
+import toast, { Toaster } from 'react-hot-toast';
 
 
 export default function LoginOrRegisterBtn() {
 	
+	const router = useRouter();
+	const pathname = usePathname();
+	// setCookie('key', 'value', options);
+	// getCookie('key', options); // => 'value'
+	
 	const [isEmailEntered, setIsEmailEntered] = useState(false);
-	const [isOtpSent, setIsOtpSent] = useState(false);
-	
-	const [email, setEmail] = useState("");
-	
-	const [optCode, setOptCode] = useState("");
+	const [isPasswordEntered, setIsPasswordEntered] = useState(false);
 	const [open, setOpen] = useState(false);
 	
-	useEffect(() => {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	
+	// useEffect(() => {
 		
-		return () => {
-			if (!isEmailEntered) {
-				setOptCode("");
-			}
-		}
-	}, []);
+		
+	// }, []);
 	
 	
 	const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-	
-	const emailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-		
-		setEmail(event.target.value);
-		
-		const isEmailValid = event.target.value.match(emailRegex);
-		if (isEmailValid) {
-			setIsEmailEntered(true);
-		} else {
-			setIsEmailEntered(false);
-		}
-	}
+	const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#.?^_-]).{8,15}$/g
 	
 	const signInOrRegister = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+		
+		const isEmailValid = email.match(emailRegex);
+		const isPasswordValid = password.match(passwordRegex);
+		
+		if (!isEmailValid) {
+			return toast.error((t) => (
+				<span className="text-center">
+					ایمیل وارد شده معتبر نیست
+				</span>
+			));
+		}
+		
+		if (!isPasswordValid) {
+			return toast.error((t) => (
+				<span className="text-center">
+					رمز عبور وارد شده باید شامل حداقل یک حرف بزرگ، یک حرف کوچک، بین ۸ تا ۱۵ کاراکتر و یک حرف خاص باشد
+				</span>
+			));
+		}
 		
 		const res = await fetch(`${process.env.BASE_URL}/auth/login/`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
 			},
-			body: JSON.stringify({ email, password: "12345678" })
-		})
+			body: JSON.stringify({ email, password })
+		});
 		
-		console.log(res)
+		if (res.status === 200) {
+			const data = await res.json();
+			
+			setCookie("token", data.token, { maxAge: 60 });
+			setCookie("refresh", data.refresh, { maxAge: 60 * 60 * 24 * 15 });
+			location.reload();
+			
+			setOpen(false);
+			
+		} else if (res.status === 400) {
+			return toast.error((t) => (
+				<span className="text-center">
+					رمز عبور و ایمیل وارد شده صحیح نیستند
+				</span>
+			));
+		}
 		
-		const data = await res.json();
-		console.log(data)
-		
-		// setIsOtpSent(true);
 	}
 	
 	
@@ -108,134 +128,68 @@ export default function LoginOrRegisterBtn() {
 					
 					<DialogDescription className="text-center text-text rtl">
 						<span className={`${EstedadSemiBold} mt-3 mb-2 block`}>
-							{
-								isOtpSent ? "کد تایید" : "ورود / ثبت ‌نام"
-							}
+							ورود / ثبت ‌نام
 						</span>
 						
 						<span className="text-[#717171] text-xs block">
-							{
-								isOtpSent ? "کد تایید پنج‌رقمی به ایمیل " + email + " ارسال شد." : "با وارد کردن ایمیل کد تاییدی برای شما ارسال خواهد شد."
-							}
+							با وارد کردن ایمیل کد تاییدی برای شما ارسال خواهد شد.
 						</span>
 					</DialogDescription>
 					
 				</DialogHeader>
 				
 				<DialogFooter className="mt-2 flex mx-auto">
-					{
-						isOtpSent ? (
-							<div
-								className="flex flex-col"
-							>
-								<InputOTP
-									maxLength={5}
-									value={optCode}
-									onChange={(optCode) => setOptCode(optCode)}
-									className="flex justify-center"
-								>
-									<InputOTPGroup>
-										<InputOTPSlot
-											className="border-text"
-											index={0}
-										/>
-									</InputOTPGroup>
-									<InputOTPGroup>
-										<InputOTPSlot
-											className="border-text"
-											index={1}
-										/>
-									</InputOTPGroup>
-									<InputOTPGroup>
-										<InputOTPSlot
-											className="border-text"
-											index={2}
-										/>
-									</InputOTPGroup>
-									<InputOTPGroup>
-										<InputOTPSlot
-											className="border-text"
-											index={3}
-										/>
-									</InputOTPGroup>
-									<InputOTPGroup>
-										<InputOTPSlot
-											className="border-text"
-											index={4}
-										/>
-									</InputOTPGroup>
-								</InputOTP>
+					
+					<div className="flex flex-col items-center w-full">
+						<form
+							className="w-full"
+							onSubmit={signInOrRegister}
+						>
+							
+							<div className="relative">
+								<Input
+									placeholder="ایمیل"
+									type="email"
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+								/>
 								
-								<div className="flex justify-between rtl mt-1.5">
-									<p className="text-xs flex">
-										<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<path d="M7.99967 15.1666C4.04634 15.1666 0.833008 11.9533 0.833008 7.99992C0.833008 4.04659 4.04634 0.833252 7.99967 0.833252C11.953 0.833252 15.1663 4.04659 15.1663 7.99992C15.1663 11.9533 11.953 15.1666 7.99967 15.1666ZM7.99967 1.83325C4.59967 1.83325 1.83301 4.59992 1.83301 7.99992C1.83301 11.3999 4.59967 14.1666 7.99967 14.1666C11.3997 14.1666 14.1663 11.3999 14.1663 7.99992C14.1663 4.59992 11.3997 1.83325 7.99967 1.83325Z" fill="#717171"/>
-											<path d="M10.4731 10.6199C10.3864 10.6199 10.2998 10.5999 10.2198 10.5466L8.1531 9.31326C7.63977 9.00659 7.25977 8.33326 7.25977 7.73992V5.00659C7.25977 4.73326 7.48643 4.50659 7.75977 4.50659C8.0331 4.50659 8.25977 4.73326 8.25977 5.00659V7.73992C8.25977 7.97992 8.45977 8.33326 8.66643 8.45326L10.7331 9.68659C10.9731 9.82659 11.0464 10.1333 10.9064 10.3733C10.8064 10.5333 10.6398 10.6199 10.4731 10.6199Z" fill="#717171"/>
-										</svg>
-										
-										<span className="mx-0.5">
-											۱:۵۹
-										</span>
-										تا دریافت مجدد کد
-									</p>
-									
-									<Button
-										className="h-4 bg-white hover:bg-white text-primary text-xs p-0 m-0"
-										onClick={() => setIsOtpSent(false)}
-									>
-										ویرایش ایمیل
-									</Button>
-								</div>
-								
-								<form>
-									<Button
-										className="w-full mt-4"
-										disabled={optCode.length !== 5}
-									>
-										ثبت کد
-									</Button>
-								</form>
-							</div>
-						) : (
-							<div className="flex flex-col items-center w-full">
-								<form
-									className="w-full"
-									onSubmit={signInOrRegister}
+								<span
+									className="absolute text-xs -top-[10.5px] right-4 bg-white px-0.5"
 								>
-									
-									<div className="relative">
-										<Input
-											placeholder="ایمیل"
-											type="email"
-											value={email}
-											onChange={emailHandler}
-										/>
-										
-										<span
-											className="absolute text-xs -top-[10.5px] right-4 bg-white px-0.5"
-											>
-											ایمیل
-										</span>
-									</div>
-									
-									<Button
-										className="w-full mt-3"
-										disabled={!isEmailEntered}
-									>
-										ادامه
-									</Button>
-									
-								</form>
-								<p className="text-[10px] leading-[180%] rtl mt-3">
-									ورود و عضویت در ترخینه به منزله قبول
-									{" "}
-									<Link className="text-primary" href="/rules">قوانین و مقررات</Link>
-									{" "}
-									است.
-								</p>
+									ایمیل
+								</span>
 							</div>
-						)
-					}
+							
+							<div className="relative mt-4 mb-2">
+								<Input
+									placeholder="رمز عبور"
+									type="password"
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+								/>
+								
+								<span
+									className="absolute text-xs -top-[10.5px] right-4 bg-white px-0.5"
+								>
+									رمز عبور
+								</span>
+							</div>
+							
+							<Button className="w-full mt-3">
+								ورود / ثبت ‌نام
+							</Button>
+							
+						</form>
+						<p className="text-[10px] leading-[180%] rtl mt-0.5">
+							ورود و عضویت در ترخینه به منزله قبول
+							{" "}
+							<Link className="text-primary" href="/rules">قوانین و مقررات</Link>
+							{" "}
+							است.
+						</p>
+						<Toaster />
+					</div>
 					
 				</DialogFooter>
 				

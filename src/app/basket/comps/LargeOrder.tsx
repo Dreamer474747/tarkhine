@@ -26,7 +26,7 @@ export default function LargeOrder({ src, alt, name, ingredients, price, discoun
 	const [localCount, setLocalCount] = useState(numberOfOrders);
 	
 	const addProductCount = () => {
-		let cart = JSON.parse(localStorage.getItem("cart")) || [];
+		let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 		
 		cart.forEach((item: any) => {
 			if (item.name === name) {

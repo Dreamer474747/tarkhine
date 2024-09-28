@@ -1,3 +1,12 @@
+//@ts-nocheck
+
+import swal from "sweetalert";
+
+const showSwal = (title: string, icon: string, buttons: string[] | string ) => {
+	return swal({ title, icon, buttons })
+}
+
+
 const getCurrentBranchName = (pathname: string) => {
 	switch(pathname) {
 		case "/branch/okbaataan":
@@ -39,4 +48,7 @@ const priceCalculator = (price: number, discount: number | null) => {
 	
 }
 
-export { getCurrentBranchName, toPersianNumber, priceCalculator };
+
+
+
+export { getCurrentBranchName, toPersianNumber, priceCalculator, showSwal };

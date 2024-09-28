@@ -18,7 +18,7 @@ export default function SmallOrder({ name, price, discount, numberOfOrders }: Sm
 	const [localCount, setLocalCount] = useState(numberOfOrders);
 	
 	const addProductCount = () => {
-		let cart = JSON.parse(localStorage.getItem("cart")) || [];
+		let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 		
 		cart.forEach((item: any) => {
 			if (item.name === name) {
