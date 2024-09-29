@@ -1,4 +1,4 @@
-import ProductCard from "m/productCards/ProductCard";
+import ProductCard from "m/productCards/ProductCard/ProductCard";
 
 import {
   Carousel,
@@ -43,11 +43,13 @@ export default function FoodCarousel({ isSpecial, products }: FoodCarouselParams
 								src={product.photo}
 								alt={product.title}
 								name={product.title}
-								price={+(product.price)}
+								price={+product.price}
 								discount={0}
 								rate={4}
 								totalRate={3}
 								specialProduct={isSpecial}
+								productCode={product.product_code}
+								ingredients={product.description}
 							/>
 						</CarouselItem>
 					))

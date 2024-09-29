@@ -1,13 +1,12 @@
-"use client";
 import Image from "next/image";
-
-import { useState } from "react";
 
 import { priceCalculator, toPersianNumber } from "u/helpers";
 import { EstedadMedium, EstedadSemiBold } from "@/app/Fonts";
 
+import AddToBasketBtn from "./AddToBasketBtn";
+import WishlistBtn from "./WishlistBtn";
+
 import { Badge } from "ui/Badge";
-import { Button } from "ui/Button";
 
 import type { Product } from "u/types";
 
@@ -19,61 +18,12 @@ type MenuProductCardParams = {
 	price: number,
 	discount: number,
 	rate: number,
+	productCode: string
 }
 
 
-export default function MenuProductCard({ src, alt, name, ingredients, price, discount, rate
+export default function MenuProductCard({ src, alt, name, ingredients, price, discount, rate, productCode
 }: MenuProductCardParams) {
-	
-	const [isButtonPressed, setIsButtonPressed] = useState(false);
-	
-	
-	const addProductToLocalStorage = () => {
-		
-		let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-		
-		cart.push({ src, alt, name, price, discount, rate, count: 1 });
-		
-		localStorage.setItem("cart", JSON.stringify(cart));
-		
-		console.log("cart after adding:", cart)
-	}
-	
-	
-	
-	const addToBasket = () => {
-		
-		setIsButtonPressed(true);
-		setTimeout(() => {
-			
-			setIsButtonPressed(false);
-			
-		}, 2000)
-		
-		let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-		
-		if (cart.length > 0) {
-			
-			const isInCart = cart.some((product: MenuProductCardParams) => product.name === name);
-			
-			if (isInCart) {
-				cart.forEach((item: any) => {
-					if (item.name === name) {
-						item.count = item.count + 1
-					}
-				})
-				
-				localStorage.setItem("cart", JSON.stringify(cart));
-				
-			} else {
-				
-				addProductToLocalStorage();
-			}
-			
-		} else {
-			addProductToLocalStorage();
-		}
-	}
 	
 	
 	return (
@@ -102,11 +52,9 @@ export default function MenuProductCard({ src, alt, name, ingredients, price, di
 						{name}
 					</h5>
 					
-					<svg className="hidden md:block opacity-0 cursor-pointer transition menu-card-heart-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path className="transition" d="M12 21.65C11.69 21.65 11.39 21.61 11.14 21.52C7.32 20.21 1.25 15.56 1.25 8.68998C1.25 5.18998 4.08 2.34998 7.56 2.34998C9.25 2.34998 10.83 3.00998 12 4.18998C13.17 3.00998 14.75 2.34998 16.44 2.34998C19.92 2.34998 22.75 5.19998 22.75 8.68998C22.75 15.57 16.68 20.21 12.86 21.52C12.61 21.61 12.31 21.65 12 21.65ZM7.56 3.84998C4.91 3.84998 2.75 6.01998 2.75 8.68998C2.75 15.52 9.32 19.32 11.63 20.11C11.81 20.17 12.2 20.17 12.38 20.11C14.68 19.32 21.26 15.53 21.26 8.68998C21.26 6.01998 19.1 3.84998 16.45 3.84998C14.93 3.84998 13.52 4.55998 12.61 5.78998C12.33 6.16998 11.69 6.16998 11.41 5.78998C10.48 4.54998 9.08 3.84998 7.56 3.84998Z" fill="#717171"/>
-					</svg>
+					<WishlistBtn productCode={productCode} />
 					
-					{ discount && (
+					{ discount ? (
 							<div
 								className={`md:hidden flex items-center justify-end
 								leading-[180%]`}
@@ -124,7 +72,7 @@ export default function MenuProductCard({ src, alt, name, ingredients, price, di
 									٪{toPersianNumber(discount)}
 								</Badge>
 							</div>
-						)
+						) : ""
 					}
 					
 				</div>
@@ -139,7 +87,7 @@ export default function MenuProductCard({ src, alt, name, ingredients, price, di
 					
 					<div className="price">
 						{
-							discount && (
+							discount ? (
 								<div className=" hidden md:flex items-center justify-end">
 									<p
 										className="line-through text-[#adadad] ml-2"
@@ -154,7 +102,7 @@ export default function MenuProductCard({ src, alt, name, ingredients, price, di
 										٪{toPersianNumber(discount)}
 									</Badge>
 								</div>
-							)
+							) : ""
 						}
 						
 						<p
@@ -191,15 +139,15 @@ export default function MenuProductCard({ src, alt, name, ingredients, price, di
 						className="sm:hidden stars"
 					/>
 					
-					<Button
-						className={`w-[100px] sm:w-[140px] md:w-[244px] xl:w-[170px] xl--2xl:w-[244px]
-						leading-[180%] ${EstedadMedium} text-[10px] sm:text-xs md:text-sm xl--2xl:text-base
-						h-8 md:h-10 add-to-basket-btn`}
-						disabled={isButtonPressed}
-						onClick={addToBasket}
-					>
-						{ isButtonPressed ? "افزوده شد!" : "افزودن به سبد خرید" }
-					</Button>
+					<AddToBasketBtn
+						src={src}
+						alt={alt}
+						name={name}
+						ingredients={ingredients}
+						price={price}
+						discount={discount}
+						rate={rate}
+					/>
 				</div>
 			</div>
 			

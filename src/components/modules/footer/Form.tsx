@@ -26,7 +26,12 @@ const Form = () => {
 			return showSwal("ایمیل وارد شده معتبر نیست", "error", "باشه");
 		}
 		
-		let messageObj = { name, phone_number: phone, message }
+		let messageObj: {
+			name: string,
+			phone_number: number | string,
+			message: string,
+			email?: string
+		} = { name, phone_number: phone, message }
 		if (email) {
 			messageObj.email = email
 		}

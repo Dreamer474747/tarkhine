@@ -9,7 +9,7 @@ export default function EmptyBasket() {
 	
 	return (
 		
-		<div className="flex justify-items my-10 rtl overflow-x-hidden">
+		<div className="flex justify-items my-10 rtl overflow-x-hidden mx-auto">
 			
 			<div className="relative text-center">
 				<svg className="opacity-40 w-[200px] h-[198px] sm:w-[280px] sm:h-[278px] lg:w-[325px] lg:h-[313px]" width="325" height="313" viewBox="0 0 325 313" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +20,9 @@ export default function EmptyBasket() {
 					className={`flex flex-col items-center absolute top-1/2 left-1/2 transform
 					-translate-x-1/2 -translate-y-1/2 w-96`}
 				>
-					<h3 className="text-[10px] leading-[180%] sm:text-xl text-[#717171] mb-4 lg:mb-6">
+					<h3
+						className="text-[10px] leading-[180%] w-60 lg:w-72 sm:text-xl text-[#717171] mb-4 lg:mb-6"
+					>
 						شما در حال حاضر هیچ سفارشی ثبت نکرده‌اید!
 					</h3>
 					

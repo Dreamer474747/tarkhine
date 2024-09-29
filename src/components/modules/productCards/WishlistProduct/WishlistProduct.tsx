@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { toPersianNumber } from "u/helpers";
 
-import { Button } from "ui/Button";
+import AddToBasketBtn from "./AddToBasketBtn";
 
 import { EstedadSemiBold, EstedadMedium } from "@/app/Fonts";
 
@@ -11,11 +11,13 @@ type ProductParams = {
 	alt: string,
 	name: string,
 	price: number,
-	rate: number
+	rate: number,
+	ingredients: string,
+	discount: number
 }
 
 
-export default function WishlistProduct({ src, alt, name, price, rate }: ProductParams) {
+export default function WishlistProduct({ src, alt, name, price, rate, ingredients, discount }: ProductParams) {
 	
 	
 	return (
@@ -28,8 +30,7 @@ export default function WishlistProduct({ src, alt, name, price, rate }: Product
 				height="140"
 				src={src}
 				alt={alt}
-				className={`rounded-t-lg select-none w-full lg--xl:w-[250px] xl--2xl:w-[277px]
-				lg:h-[155px] lg--xl:h-[115px] xl--2xl:h-[140px]`}
+				className={`rounded-t-lg select-none w-full lg--xl:w-[250px] xl--2xl:w-[277px]`}
 			/>
 			
 			<div
@@ -70,12 +71,15 @@ export default function WishlistProduct({ src, alt, name, price, rate }: Product
 					</p>
 				</div>
 				
-				<Button
-					className={`w-full sm:mb-1 h-8 md:h-10 text-center 
-					${EstedadMedium} text-xs md:text-base`}
-				>
-					افزودن به سبد خرید
-				</Button>
+				<AddToBasketBtn
+					src={src}
+					alt={alt}
+					name={name}
+					ingredients={ingredients}
+					price={price}
+					discount={discount}
+					rate={rate}
+				/>
 			</div>
 			
 		</div>

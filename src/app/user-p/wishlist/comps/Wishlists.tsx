@@ -1,55 +1,60 @@
+"use client";
 import Link from "next/link";
+import { useEffect, useState, useContext } from "react";
+import { getCookie, setCookie, hasCookie } from "cookies-next";
 
 import { ScrollArea } from "ui/ScrollArea";
 import { Separator } from "ui/Separator";
 
-import WishlistProduct from "m/productCards/WishlistProduct";
+import WishlistProduct from "m/productCards/WishlistProduct/WishlistProduct";
+import { ProductsContext } from "@/components/contexts/ProductsProvider";
+import type { ProductsContextType, Product } from "u/types";
 
 import { EstedadSemiBold, EstedadMedium } from "@/app/Fonts";
 
 
 
+
 export default function Wishlists() {
 	
+	const { products } = useContext(ProductsContext) as ProductsContextType;
 	
-	const wishlists = [
-		{
-			src: "/images/pasta.jpg",
-			alt: "pasta",
-			name: "پاستا سبزیجات",
-			price: 150_000,
-			rate: 4
-		},
-		{
-			src: "/images/pasta.jpg",
-			alt: "pasta",
-			name: "پاستا سبزیجات",
-			price: 150_000,
-			rate: 4
-		},
-		{
-			src: "/images/pasta.jpg",
-			alt: "pasta",
-			name: "پاستا سبزیجات",
-			price: 150_000,
-			rate: 4
-		},
-		{
-			src: "/images/pasta.jpg",
-			alt: "pasta",
-			name: "پاستا سبزیجات",
-			price: 150_000,
-			rate: 4
-		},
-		{
-			src: "/images/pasta.jpg",
-			alt: "pasta",
-			name: "پاستا سبزیجات",
-			price: 150_000,
-			rate: 4
-		},
+	const [wishlists, setWishlists] = useState<Product[]>([]);
+	
+	const getWishlistProducts = async () => {
 		
-	];
+		const token = getCookie("token");
+		
+		if (token) {
+			const res = await fetch(`${process.env.BASE_URL}/favorite-products/list/`, {
+				method: "GET",
+				headers: {
+					"Authorization": `Bearer ${token}`
+				},
+			});
+			
+			const { product } = await res.json();
+			const helper: any = []
+			
+			if (product.length) {
+				for (let i = 0; product.length > i; i++) {
+					
+					const wishlistedProduct = products.find((myProduct: any) => product[i].title === myProduct.title)
+					helper.push(wishlistedProduct);
+				}
+				console.log(2);
+				setWishlists(helper);
+			}
+		}
+	}
+	
+	useEffect(() => {
+		
+		if (products.length > 0) {
+			getWishlistProducts();
+		}
+		console.log(1)
+	}, [products])
 	
 	
 	return (
@@ -65,19 +70,21 @@ export default function Wishlists() {
 			</h2>
 			<Separator className="bg-[#cbcbcb] mt-2 mb-6 hidden md:block" />
 			
-			<div className="flex justify-around md:justify-between flex-wrap">
+			<div className="flex justify-around md:justify-between flex-wrap rtl">
 				{
 					wishlists.length ?  wishlists.map((product, index) => (
 						<WishlistProduct
 							key={index}
-							src={product.src}
-							alt={product.alt}
-							name={product.name}
-							price={product.price}
+							src={product.photo}
+							alt={product.title}
+							name={product.title}
+							price={+product.price}
 							rate={product.rate}
+							discount={product.discount ? product.discount : 0}
+							ingredients={product.description}
 						/>
 					)) : (
-						<div className="flex justify-items -mt-0 md:my-10 rtl overflow-x-hidden">
+						<div className="flex justify-items -mt-0 md:my-10 rtl overflow-x-hidden mx-auto">
 							
 							<div className="relative text-center">
 								<svg className="opacity-40 w-[200px] h-[198px] sm:w-[280px] sm:h-[278px] lg:w-[325px] lg:h-[313px]" width="325" height="313" viewBox="0 0 325 313" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -88,14 +95,17 @@ export default function Wishlists() {
 									className={`flex flex-col items-center absolute top-1/2 left-1/2 transform
 									-translate-x-1/2 -translate-y-1/2 md:w-[28rem] lg:w-[34rem]`}
 								>
-									<h3 className="text-[10px] leading-[180%] sm:text-xl text-[#717171] mb-4 lg:mb-6">
+									<h3
+										className={`text-sm sm:text-lg lg:text-xl leading-[180%] w-60 lg:w-72
+										text-[#717171] mb-4 lg:mb-6`}
+									>
 										شما در حال حاضر هیچ محصولی را به علاقه‌مندی‌ها اضافه نکرده‌اید!
 									</h3>
 									
 									<Link
 										href="/menu"
-										className={`${EstedadMedium} w-[152px] sm:w-[288px] h-8 leading-8 border-primary
-										text-primary border border-primary rounded bg-white text-xs sm:text-base`}
+										className={`${EstedadMedium} w-[152px] sm:w-[240px] lg:w-[288px] h-8 leading-8
+										border-primary text-primary border border-primary rounded bg-white text-xs sm:text-base`}
 									>
 										منوی رستوران
 									</Link>

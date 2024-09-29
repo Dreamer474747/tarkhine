@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import MenuProductCard from "m/productCards/MenuProductCard";
+import MenuProductCard from "m/productCards/MenuProductCard/MenuProductCard";
 
 import { EstedadBold } from "@/app/Fonts";
 
@@ -39,6 +39,7 @@ export default function MenuItems({ title, products }: MenuItemsParams) {
 							price={+product.price}
 							discount={product.discount ? product.discount : 0}
 							rate={product.rate}
+							productCode={product.product_code}
 						/>
 					))
 				}

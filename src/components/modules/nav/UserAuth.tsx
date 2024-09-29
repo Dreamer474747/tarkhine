@@ -1,7 +1,7 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { usePathname, useRouter, redirect } from "next/navigation";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 import { Button } from "ui/Button";
 import LogoutBtn from "m/LogoutBtn";
@@ -43,8 +43,10 @@ export default function UserAuth() {
 		if (firstRender) {
 			firstRender = false;
 			
-		} else if (!firstRender && !isUserLoggedIn) {
+		} else if (!firstRender && !isUserLoggedIn && hasCookie("refresh")) {
 			refreshMyAccessToken();
+		} else if (pathname !== "/") {
+			redirect("/");
 		}
 	})
 	

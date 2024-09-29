@@ -1,4 +1,4 @@
-import OrderTrackingProduct from "m/productCards/OrderTrackingProduct";
+import OrderTrackingProduct from "m/productCards/OrderTrackingProduct/OrderTrackingProduct";
 
 import { toPersianNumber } from "u/helpers";
 

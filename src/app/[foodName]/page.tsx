@@ -10,7 +10,7 @@ import type { ProductsContextType, Product } from "u/types";
 
 import Nav from "m/nav/Nav";
 import Footer from "m/footer/Footer";
-import ProductCard from "m/productCards/ProductCard";
+import ProductCard from "m/productCards/ProductCard/ProductCard";
 
 import { Input } from "ui/Input";
 import { Button } from "ui/Button";
@@ -88,10 +88,12 @@ export default function Page({ params }: PageParamsType) {
 											alt={product.title}
 											name={product.title}
 											price={+product.price}
-											discount={product.discount}
+											discount={product.discount ? product.discount : 0}
 											rate={product.rate}
 											totalRate={3}
 											specialProduct={false}
+											productCode={product.product_code}
+											ingredients={product.description}
 										/>
 									))
 								}

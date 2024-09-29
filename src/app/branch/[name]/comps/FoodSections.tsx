@@ -22,7 +22,7 @@ export default function FoodSections() {
 				return 1;
 				break;
 			case "/branch/chaaloos":
-				return 5;
+				return 20;
 				break;
 			case "/branch/aqdasie":
 				return 10;

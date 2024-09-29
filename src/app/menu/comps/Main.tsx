@@ -6,7 +6,7 @@ import { useContext, useState, useMemo, useEffect } from "react";
 import { ProductsContext } from "@/components/contexts/ProductsProvider";
 import type { ProductsContextType, Product } from "u/types";
 
-import MenuProductCard from "m/productCards/MenuProductCard";
+import MenuProductCard from "m/productCards/MenuProductCard/MenuProductCard";
 import {
 MenuLinkItems,
 FilterOptions,
@@ -26,7 +26,6 @@ export default function Main() {
 	
 	const bestSellers = useMemo(() => products?.filter((food: Product) => food.discount), [products]);
 	const mostEconomical = useMemo(() => products?.sort((a: Product, b: Product) => +a.price - +b.price), [products]);
-	
 	
 	const [isIranianFood, setIsIranianFood] = useState(false);
 	const [isNonIranianFood, setIsNonIranianFood] = useState(false);
@@ -162,6 +161,7 @@ export default function Main() {
 									price={+product.price}
 									discount={product.discount ? product.discount : 0}
 									rate={product.rate}
+									productCode={product.product_code}
 								/>
 							))
 							
@@ -176,6 +176,7 @@ export default function Main() {
 									price={+product.price}
 									discount={product.discount ? product.discount : 0}
 									rate={product.rate}
+									productCode={product.product_code}
 								/>
 							))
 						)
