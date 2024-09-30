@@ -19,7 +19,6 @@ type Product = {
 }
 
 
-
 export default function AddToBasketBtn({ src, alt, name, ingredients, price, discount, rate }: Product) {
 	
 	const [isButtonPressed, setIsButtonPressed] = useState(false);
@@ -34,7 +33,7 @@ export default function AddToBasketBtn({ src, alt, name, ingredients, price, dis
 		
 		localStorage.setItem("cart", JSON.stringify(cart));
 		
-		setCartLength((prev: number) => prev++);
+		setCartLength((prev: number) => prev + 1);
 	}
 	
 	

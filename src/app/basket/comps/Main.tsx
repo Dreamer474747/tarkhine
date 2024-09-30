@@ -7,8 +7,6 @@ import { EstedadMedium } from "@/app/Fonts";
 
 import { EmptyBasket, OrderInfo, LargeOrder, SmallOrder, Address } from ".";
 
-import type { Product } from "u/types";
-
 import { ProductsContext } from "@/components/contexts/ProductsProvider";
 import type { ProductsContextType, Product } from "u/types";
 
@@ -18,7 +16,7 @@ export default function Main() {
 	
 	const { setCartLength } = useContext(ProductsContext) as ProductsContextType;
 	
-	const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart") || "[]"));
+	const [cart, setCart] = useState<Product[]>([]);
 	
 	const [totalPrice, setTotalPrice] = useState(0);
 	const [totalOffPrice, setTotalOffPrice] = useState(0);
@@ -59,16 +57,20 @@ export default function Main() {
 	}
 	
 	useEffect(() => {
-		calcTotalPrice(cart);
-		calcTotalOffPrice(cart);
+		
+		const basket: Product[] = JSON.parse(localStorage.getItem("cart") || "[]");
+		
+		calcTotalPrice(basket);
+		calcTotalOffPrice(basket);
+		setCart(basket);
 		
 	}, [])
 	
 	const deleteOrder = (name: string) => {
 		
-		const productName = cart.find((product: Product) => product.name === name).name as string;
+		const productName = cart.find((product: Product) => product.name === name)?.name;
 		
-		const newCart = cart.filter((product: Product) => product.name !== productName);
+		const newCart = cart.filter((product: any) => product.name !== productName);
 		
 		localStorage.setItem("cart", JSON.stringify(newCart));
 		setCart(newCart);
@@ -110,7 +112,6 @@ export default function Main() {
 											numberOfOrders={product.count}
 											calcTotalPrice={calcTotalPrice}
 											calcTotalOffPrice={calcTotalOffPrice}
-											setCart={setCart}
 											deleteOrder={deleteOrder}
 										/>
 									))
@@ -123,13 +124,16 @@ export default function Main() {
 								lg:hidden max-h-[400px] md:max-h-[unset]`}
 							>
 								{
-									cart?.map((product: {name: string, price: number, discount: number | null, count: number}) => (
+									cart?.map((product: Product) => (
 										<SmallOrder
 											key={product.name}
-											name={product.name}
-											price={product.price}
+											name={product.name as string}
+											price={+product.price}
 											discount={product.discount ? product.discount : 0}
-											numberOfOrders={product.count}
+											numberOfOrders={+(product.count as number)}
+											calcTotalPrice={calcTotalPrice}
+											calcTotalOffPrice={calcTotalOffPrice}
+											deleteOrder={deleteOrder}
 										/>
 									))
 								}

@@ -8,12 +8,11 @@ export const ProductsContext = createContext<ProductsContextType | null>(null)
 
 export default function ProductsProvider({ children }: { children: React.ReactNode }) {
 	
-	const basket = JSON.parse(localStorage.getItem("cart") || "[]");
-	const [cartLength, setCartLength] = useState(basket.length);
-	
 	const [products, setProducts] = useState([]);
 	const [nonIranianProducts, setNonIranianProducts] = useState([]);
 	const [iranianProducts, setIranianProducts] = useState([]);
+	
+	const [cartLength, setCartLength] = useState(0);
 	
 	useEffect(() => {
 		
@@ -33,6 +32,13 @@ export default function ProductsProvider({ children }: { children: React.ReactNo
 		}
 		
 		getProducts();
+		
+		if (global?.window !== undefined) {
+			// Now it's safe to access window and localStorage
+			const basket = JSON.parse(localStorage.getItem("cart") || "[]");
+			setCartLength(basket.length);
+		}
+		
 	}, [])
 	
 	

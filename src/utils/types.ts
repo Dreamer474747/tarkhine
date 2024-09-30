@@ -14,6 +14,7 @@ type Product = {
 	product_code: string,
 	title: string,
 	rate: number,
+	name?: string,
 	count?: number
 }
 

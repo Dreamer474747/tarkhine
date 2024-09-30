@@ -20,13 +20,12 @@ type LargeOrderParams = {
 	numberOfOrders: number,
 	calcTotalPrice: (param: Product[]) => number,
 	calcTotalOffPrice: (param: Product[]) => void,
-	setCart: Dispatch<SetStateAction<Product[]>>,
 	deleteOrder: (name: string) => void,
 }
 
 
 export default function LargeOrder({ src, alt, name, ingredients, price, discount, rate, numberOfOrders,
-calcTotalPrice, calcTotalOffPrice, setCart, deleteOrder }: LargeOrderParams) {
+calcTotalPrice, calcTotalOffPrice, deleteOrder }: LargeOrderParams) {
 	
 	const [localCount, setLocalCount] = useState(numberOfOrders);
 	
