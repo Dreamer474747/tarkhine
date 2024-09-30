@@ -1,47 +1,169 @@
 "use client";
-import { useState } from "react";
-import { EstedadMedium } from "@/app/Fonts";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { getCookie, setCookie, hasCookie } from "cookies-next";
 
 import BirthDateInput from "./BirthDateInput";
 
 import { Input } from "ui/Input";
 import { Button } from "ui/Button";
 
+import { refreshMyAccessToken, showSwal } from "u/helpers";
+import { emailRegex } from "u/constants";
+
+import { EstedadMedium } from "@/app/Fonts";
+
+import type { Value } from "react-multi-date-picker";
+
 
 
 export default function PersonalDataForm() {
 	
+	const router = useRouter();
+	
 	const [canChangeData, setCanChangeData] = useState(false);
+	
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [email, setEmail] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
+	const [nickName, setNickName] = useState("");
+	
+	const [value, setValue] = useState<Value>(new Date());
+	// this one is for birthday input. im too lazy rn to change the name in two different files.
+	
+	
+	
+	useEffect(() => {
+		
+		const getUserData = async () => {
+			
+			const token = getCookie("token");
+			if (token) {
+				
+				const res = await fetch(`${process.env.BASE_URL}/profile/user-detail/`, {
+					method: "GET",
+					headers: {
+						"Authorization": `Bearer ${token}`
+					}
+				});
+				
+				const data = await res.json();
+				console.log(data)
+				
+			} else {
+				await refreshMyAccessToken(router);
+				getUserData();
+			}
+		}
+		getUserData()
+		
+	}, [])
+	
+	async function submitNewUserData(event: React.FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		
+		if (!firstName.trim() || !lastName.trim() || !email.trim() || !phoneNumber.trim()) {
+			return showSwal("یکی از فیلدهای اجباری خالی است", "error", "باشه");
+		}
+		
+		const isEmailValid = email.match(emailRegex);
+		if (!isEmailValid) {
+			return showSwal("ایمیل وارد شده معتبر نیست", "error", "باشه");
+		}
+		
+		const token = getCookie("token");
+		
+		const userData = {
+			first_name: firstName,
+			last_name: lastName,
+			username: email,
+			phone_number: phoneNumber,
+			nick_name: nickName,
+			birth_date: value
+		}
+		console.log(userData);
+		/*
+			birth_date: Sun Sep 29 2024 21:07:59 GMT+0330 (Iran Standard Time) {}
+			first_name: "۱۱۱۱۱۱۱۱۱"
+			last_name: "۲۲۲۲۲۲۲۲۲۲۲۲"
+			nick_name: ""
+			phone_number: "432432432"
+			username: "sjkfhj@fkjsl.com"
+		*/
+		
+		const res = await fetch(`${process.env.BASE_URL}/profile/edit/`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": `Bearer ${token}`
+			}
+		});
+	}
+	
+	
 	
 	
 	return (
 		<form
 			className="flex flex-col justify-items pt-4 lg:pt-8 *:flex-wrap"
+			onSubmit={submitNewUserData}
 		>
 			<div
 				className={`flex *:w-full lg:*:w-[308px] xl:*:w-[350px] *:mb-3 lg:*:mb-6
 				${canChangeData ? "*:border-text" : ""}`}
 			>
-                <Input disabled={!canChangeData} placeholder="نام" className="lg:ml-4" />
-                <Input disabled={!canChangeData} placeholder="نام خانوادگی" />
+                <Input
+					disabled={!canChangeData}
+					placeholder="نام"
+					className="lg:ml-4"
+					value={firstName}
+					onChange={(e) => setFirstName(e.target.value)}
+				/>
+				<Input
+					disabled={!canChangeData}
+					placeholder="نام خانوادگی"
+					value={lastName}
+					onChange={(e) => setLastName(e.target.value)}
+				/>
             </div>
             
 			<div
 				className={`flex *:w-full lg:*:w-[308px] xl:*:w-[350px] *:mb-3 lg:*:mb-6
 				${canChangeData ? "*:border-text" : ""}`}
 			>
-                <Input disabled={!canChangeData} placeholder="ادرس ایمیل" className="lg:ml-4 " />
-                <Input disabled={!canChangeData} placeholder="user number" className="ltr" />
+                <Input
+					disabled={!canChangeData}
+					placeholder="ادرس ایمیل"
+					type="email"
+					className="lg:ml-4"
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
+				/>
+                <Input
+					disabled={!canChangeData}
+					placeholder="phone number"
+					type="number"
+					className="ltr"
+					value={phoneNumber}
+					onChange={(e) => setPhoneNumber(e.target.value)}
+				/>
             </div>
             
 			<div
 				className="flex justify-items *:w-full lg:*:w-[308px] xl:*:w-[350px] *:mb-3 lg:*:mb-6"
 			>
-                <BirthDateInput canChangeData={canChangeData} />
+                <BirthDateInput
+					canChangeData={canChangeData}
+					value={value}
+					setValue={setValue}
+				/>
 				<Input
 					disabled={!canChangeData}
 					className={`lg:mr-4 ${canChangeData ? "border-text" : ""}`}
 					placeholder="نام نمایشی"
+					value={nickName}
+					onChange={(e) => setNickName(e.target.value)}
 				/>
             </div>
 			

@@ -7,14 +7,18 @@ import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 
-import type { Value } from "react-multi-date-picker";
-
 import "react-multi-date-picker/styles/colors/green.css"
 
+type BirthDateInputParams = {
+	canChangeData: boolean,
+	value: any,
+	setValue: any
+}
 
-export default function BirthDateInput({ canChangeData }: { canChangeData: boolean }) {
+
+export default function BirthDateInput({ canChangeData, value, setValue }: BirthDateInputParams) {
 	
-	const [value, setValue] = useState<Value>(new Date());
+	
 	
 	const changeHandler = (event: any) => {
 		const date = new Date(event);

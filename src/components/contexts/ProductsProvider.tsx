@@ -8,6 +8,9 @@ export const ProductsContext = createContext<ProductsContextType | null>(null)
 
 export default function ProductsProvider({ children }: { children: React.ReactNode }) {
 	
+	const basket = JSON.parse(localStorage.getItem("cart") || "[]");
+	const [cartLength, setCartLength] = useState(basket.length);
+	
 	const [products, setProducts] = useState([]);
 	const [nonIranianProducts, setNonIranianProducts] = useState([]);
 	const [iranianProducts, setIranianProducts] = useState([]);
@@ -34,7 +37,7 @@ export default function ProductsProvider({ children }: { children: React.ReactNo
 	
 	
 	return (
-		<ProductsContext.Provider value={{ products, nonIranianProducts, iranianProducts }}>
+		<ProductsContext.Provider value={{ products, nonIranianProducts, iranianProducts, cartLength, setCartLength }}>
 			{children}
 		</ProductsContext.Provider>
 	)

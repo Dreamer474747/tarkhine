@@ -1,5 +1,5 @@
 //@ts-nocheck
-
+import { getCookie, setCookie } from "cookies-next";
 import swal from "sweetalert";
 
 const showSwal = (title: string, icon: string, buttons: string[] | string ) => {
@@ -49,6 +49,25 @@ const priceCalculator = (price: number, discount: number | null) => {
 }
 
 
+const refreshMyAccessToken = async (router: any) => {
+	
+	const res = await fetch(`${process.env.BASE_URL}/auth/token/refresh/`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({ refresh: getCookie("refresh") })
+	});
+	
+	if (res.status === 200) {
+		const data = await res.json();
+		setCookie("token", data.access, { maxAge: 60 });
+		router.refresh();
+	}
+}
 
 
-export { getCurrentBranchName, toPersianNumber, priceCalculator, showSwal };
+
+
+
+export { getCurrentBranchName, toPersianNumber, priceCalculator, showSwal, refreshMyAccessToken };

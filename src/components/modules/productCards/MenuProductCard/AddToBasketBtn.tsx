@@ -1,9 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import { Button } from "ui/Button";
 
 import { EstedadMedium } from "@/app/Fonts";
+
+import { ProductsContext } from "@/components/contexts/ProductsProvider";
+import type { ProductsContextType } from "u/types";
 
 type Product = {
 	src: string,
@@ -20,6 +23,7 @@ export default function AddToBasketBtn({ src, alt, name, ingredients, price, dis
 	
 	const [isButtonPressed, setIsButtonPressed] = useState(false);
 	
+	const { setCartLength } = useContext(ProductsContext) as ProductsContextType;
 	
 	const addProductToLocalStorage = () => {
 		
@@ -28,6 +32,8 @@ export default function AddToBasketBtn({ src, alt, name, ingredients, price, dis
 		cart.push({ src, alt, name, price, discount, rate, count: 1 });
 		
 		localStorage.setItem("cart", JSON.stringify(cart));
+		
+		setCartLength((prev: number) => prev + 1)
 	}
 	
 	

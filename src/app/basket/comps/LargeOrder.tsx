@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 
 import { toPersianNumber } from "u/helpers";
-
+import { Product } from "u/types";
 import { EstedadSemiBold } from "@/app/Fonts";
 
 import { Button } from "ui/Button";
@@ -17,11 +17,16 @@ type LargeOrderParams = {
 	price: number,
 	discount: number,
 	rate: number,
-	numberOfOrders: number
+	numberOfOrders: number,
+	calcTotalPrice: (param: Product[]) => number,
+	calcTotalOffPrice: (param: Product[]) => void,
+	setCart: Dispatch<SetStateAction<Product[]>>,
+	deleteOrder: (name: string) => void,
 }
 
 
-export default function LargeOrder({ src, alt, name, ingredients, price, discount, rate, numberOfOrders }: LargeOrderParams) {
+export default function LargeOrder({ src, alt, name, ingredients, price, discount, rate, numberOfOrders,
+calcTotalPrice, calcTotalOffPrice, setCart, deleteOrder }: LargeOrderParams) {
 	
 	const [localCount, setLocalCount] = useState(numberOfOrders);
 	
@@ -36,21 +41,43 @@ export default function LargeOrder({ src, alt, name, ingredients, price, discoun
 		
 		localStorage.setItem("cart", JSON.stringify(cart) || "[]");
 		
-		setLocalCount(localCount + 1)
+		setLocalCount(localCount + 1);
+		
+		const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+		calcTotalPrice(currentCart);
+		calcTotalOffPrice(currentCart);
 	}
 	
 	const subtractProductCount = () => {
 		let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 		
+		let isProductDeleted = false;
+		
 		cart.forEach((item: any) => {
 			if (item.name === name) {
-				item.count = item.count - 1
+				if (item.count === 1) {
+					
+					deleteOrder(name);
+					isProductDeleted = true;
+					
+				} else {
+					item.count = item.count - 1
+				}
 			}
 		})
 		
-		localStorage.setItem("cart", JSON.stringify(cart));
-		
-		setLocalCount(localCount - 1);
+		if (isProductDeleted) {
+			return;
+			
+		} else {
+			localStorage.setItem("cart", JSON.stringify(cart));
+			
+			setLocalCount(localCount - 1);
+			
+			const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+			calcTotalPrice(currentCart);
+			calcTotalOffPrice(currentCart);
+		}
 	}
 	
 	
@@ -70,7 +97,10 @@ export default function LargeOrder({ src, alt, name, ingredients, price, discoun
 				<div className="flex justify-between items-center">
 					<h4 className={`text-xl ${EstedadSemiBold}`}>{name}</h4>
 					
-					<Button className="bg-white hover:bg-white p-0 m-0">
+					<Button
+						onClick={() => deleteOrder(name)}
+						className="bg-white hover:bg-white p-0 m-0"
+					>
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M20.9999 6.72998C20.9799 6.72998 20.9499 6.72998 20.9199 6.72998C15.6299 6.19998 10.3499 5.99998 5.11992 6.52998L3.07992 6.72998C2.65992 6.76998 2.28992 6.46998 2.24992 6.04998C2.20992 5.62998 2.50992 5.26998 2.91992 5.22998L4.95992 5.02998C10.2799 4.48998 15.6699 4.69998 21.0699 5.22998C21.4799 5.26998 21.7799 5.63998 21.7399 6.04998C21.7099 6.43998 21.3799 6.72998 20.9999 6.72998Z" fill="#353535"/>
 							<path d="M8.50001 5.72C8.46001 5.72 8.42001 5.72 8.37001 5.71C7.97001 5.64 7.69001 5.25 7.76001 4.85L7.98001 3.54C8.14001 2.58 8.36001 1.25 10.69 1.25H13.31C15.65 1.25 15.87 2.63 16.02 3.55L16.24 4.85C16.31 5.26 16.03 5.65 15.63 5.71C15.22 5.78 14.83 5.5 14.77 5.1L14.55 3.8C14.41 2.93 14.38 2.76 13.32 2.76H10.7C9.64001 2.76 9.62001 2.9 9.47001 3.79L9.24001 5.09C9.18001 5.46 8.86001 5.72 8.50001 5.72Z" fill="#353535"/>

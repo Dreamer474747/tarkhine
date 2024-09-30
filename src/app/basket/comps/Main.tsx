@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect, useContext } from "react";
 
 import { EstedadMedium } from "@/app/Fonts";
 
@@ -8,10 +9,76 @@ import { EmptyBasket, OrderInfo, LargeOrder, SmallOrder, Address } from ".";
 
 import type { Product } from "u/types";
 
+import { ProductsContext } from "@/components/contexts/ProductsProvider";
+import type { ProductsContextType, Product } from "u/types";
+
+
 
 export default function Main() {
 	
-	const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+	const { setCartLength } = useContext(ProductsContext) as ProductsContextType;
+	
+	const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart") || "[]"));
+	
+	const [totalPrice, setTotalPrice] = useState(0);
+	const [totalOffPrice, setTotalOffPrice] = useState(0);
+	
+	const calcTotalPrice = (products: Product[]) => {
+		
+		let helper = 0;
+		
+		if (products.length) {
+			helper = products.reduce((prev: number, current: Product) => {
+				
+				if (current.discount) {
+					return prev + ( +current.price * ((100 - current.discount) / 100) ) * (current.count as number)
+				} else {
+					return prev + +current.price * (current.count as number)
+				}
+				
+			}, 0);
+		}
+		setTotalPrice(helper);
+		return helper;
+	}
+	
+	const calcTotalOffPrice = (products: Product[]) => {
+		
+		let noOffPrice = 0;
+		
+		if (products.length) {
+			noOffPrice = products.reduce((prev: number, current: Product) => {
+				
+				return prev + +current.price * (current.count as number);
+			}, 0);
+			
+			const withOffPrice = calcTotalPrice(products);
+			
+			setTotalOffPrice(noOffPrice - withOffPrice);
+		}
+	}
+	
+	useEffect(() => {
+		calcTotalPrice(cart);
+		calcTotalOffPrice(cart);
+		
+	}, [])
+	
+	const deleteOrder = (name: string) => {
+		
+		const productName = cart.find((product: Product) => product.name === name).name as string;
+		
+		const newCart = cart.filter((product: Product) => product.name !== productName);
+		
+		localStorage.setItem("cart", JSON.stringify(newCart));
+		setCart(newCart);
+		
+		setCartLength((prev: number) => prev - 1);
+		
+		calcTotalPrice(newCart);
+		calcTotalOffPrice(newCart);
+	}
+	
 	
 	
 	return (
@@ -41,6 +108,10 @@ export default function Main() {
 											discount={product.discount}
 											rate={product.rate}
 											numberOfOrders={product.count}
+											calcTotalPrice={calcTotalPrice}
+											calcTotalOffPrice={calcTotalOffPrice}
+											setCart={setCart}
+											deleteOrder={deleteOrder}
 										/>
 									))
 								}
@@ -72,7 +143,10 @@ export default function Main() {
 						>
 							<Address />
 							
-							<OrderInfo />
+							<OrderInfo
+								totalPrice={totalPrice}
+								totalOffPrice={totalOffPrice}
+							/>
 						</div>
 					</>
 					

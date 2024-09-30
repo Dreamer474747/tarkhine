@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 type Product = {
 	description: string,
 	discount: number | null,
@@ -19,6 +21,8 @@ type ProductsContextType = {
 	products: Product[],
 	nonIranianProducts: Product[],
 	iranianProducts: Product[],
+	cartLength: number,
+	setCartLength: Dispatch<SetStateAction<number>>
 }
 
 export type { Product, ProductsContextType }

@@ -1,9 +1,23 @@
+"use client";
+import { useContext } from "react";
+
 import { Separator } from "ui/Separator";
 import { Button } from "ui/Button";
 
+import { ProductsContext } from "@/components/contexts/ProductsProvider";
+import type { ProductsContextType, Product } from "u/types";
+
+import { toPersianNumber } from "u/helpers";
+
+type OrderInfoParams = {
+	totalPrice: number,
+	totalOffPrice: number
+}
 
 
-export default function OrderInfo() {
+export default function OrderInfo({ totalPrice, totalOffPrice }: OrderInfoParams) {
+	
+	const { cartLength } = useContext(ProductsContext) as ProductsContextType;
 	
 	
 	return (
@@ -13,7 +27,7 @@ export default function OrderInfo() {
 			<div className="flex justify-between items-center">
 				<h5 className="text-sm sm:text-base">
 					سبد خرید
-					<span className="text-xs sm:text-sm">(۴)</span>
+					<span className="text-xs sm:text-sm">({toPersianNumber(cartLength)})</span>
 				</h5>
 				
 				<Button className="p-0 m-0 bg-white hover:bg-white">
@@ -35,7 +49,7 @@ export default function OrderInfo() {
 				</h5>
 				
 				<p className="text-[#717171] text-xs sm:text-sm">
-					۶۳٬۰۰۰
+					{toPersianNumber(totalOffPrice.toLocaleString())}
 					تومان
 				</p>
 			</div>
@@ -61,7 +75,7 @@ export default function OrderInfo() {
 				</h5>
 				
 				<p className="text-primary text-xs sm:text-sm">
-					۵۴۲٬۰۰۰
+					{toPersianNumber((totalPrice + 20_000).toLocaleString())}
 					تومان
 				</p>
 			</div>

@@ -2,12 +2,12 @@
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import { setCookie, getCookie } from "cookies-next";
 
 import { useState, useEffect } from "react";
 
 import { EstedadSemiBold } from "@/app/Fonts";
-
-import { setCookie, getCookie } from "cookies-next";
+import { emailRegex, passwordRegex } from "u/constants";
 
 import { Button } from "ui/Button";
 import { Input } from "ui/Input";
@@ -38,14 +38,6 @@ export default function LoginOrRegisterBtn() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	
-	// useEffect(() => {
-		
-		
-	// }, []);
-	
-	
-	const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-	const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#.?^_-]).{8,15}$/g
 	
 	const signInOrRegister = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
