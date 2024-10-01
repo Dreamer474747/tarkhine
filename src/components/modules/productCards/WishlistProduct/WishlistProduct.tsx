@@ -1,8 +1,12 @@
 import Image from "next/image";
 
+import { Dispatch, SetStateAction } from "react";
+
 import { toPersianNumber } from "u/helpers";
+import { Product } from "u/types";
 
 import AddToBasketBtn from "./AddToBasketBtn";
+import UnwishlistProduct from "./UnwishlistProduct";
 
 import { EstedadSemiBold, EstedadMedium } from "@/app/Fonts";
 
@@ -13,11 +17,15 @@ type ProductParams = {
 	price: number,
 	rate: number,
 	ingredients: string,
-	discount: number
+	discount: number,
+	productCode: string,
+	wishlists: Product[],
+	setWishlists: Dispatch<SetStateAction<Product[]>>
 }
 
 
-export default function WishlistProduct({ src, alt, name, price, rate, ingredients, discount }: ProductParams) {
+export default function WishlistProduct({ src, alt, name, price, rate, ingredients, discount, productCode,
+wishlists, setWishlists}: ProductParams) {
 	
 	
 	return (
@@ -39,9 +47,12 @@ export default function WishlistProduct({ src, alt, name, price, rate, ingredien
 				<div className="flex justify-between items-center">
 					<h4 className={`text-xs xs--sm:text-xl ${EstedadSemiBold}`}>{name}</h4>
 					
-					<svg className="w-4 h-4 xs--sm:w-6 xs--sm:h-6" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M16.44 3.1001C14.63 3.1001 13.01 3.9801 12 5.3301C10.99 3.9801 9.37 3.1001 7.56 3.1001C4.49 3.1001 2 5.6001 2 8.6901C2 9.8801 2.19 10.9801 2.52 12.0001C4.1 17.0001 8.97 19.9901 11.38 20.8101C11.72 20.9301 12.28 20.9301 12.62 20.8101C15.03 19.9901 19.9 17.0001 21.48 12.0001C21.81 10.9801 22 9.8801 22 8.6901C22 5.6001 19.51 3.1001 16.44 3.1001Z" fill="#C30000"/>
-					</svg>
+					<UnwishlistProduct
+						name={name}
+						productCode={productCode}
+						wishlists={wishlists}
+						setWishlists={setWishlists}
+					/>
 				</div>
 				
 				<div className="flex justify-between items-center my-3 md:my-0">

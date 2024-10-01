@@ -29,7 +29,7 @@ export default function AddToBasketBtn({ src, alt, name, ingredients, price, dis
 		
 		let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 		
-		cart.push({ src, alt, name, price, discount, rate, count: 1 });
+		cart.push({ src, alt, name, ingredients, price, discount, rate, count: 1 });
 		
 		localStorage.setItem("cart", JSON.stringify(cart));
 		

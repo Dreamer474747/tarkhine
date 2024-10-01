@@ -53,7 +53,7 @@ export default function LogoutBtn({ text } : { text: string }) {
 				<DialogFooter className="mt-4">
 					<div className="mx-auto *:w-[117px]">
 						<Button
-							className="mr-3 bg-[#FFF2F2] text-[#C30000]"
+							className="mr-3 bg-[#FFF2F2] hover:bg-[#FFF2F2] text-[#C30000]"
 						>
 							خروج
 						</Button>

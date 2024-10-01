@@ -34,15 +34,14 @@ export default function Wishlists() {
 			});
 			
 			const { product } = await res.json();
-			const helper: any = []
+			const helper: Product[] = []
 			
 			if (product.length) {
 				for (let i = 0; product.length > i; i++) {
 					
-					const wishlistedProduct = products.find((myProduct: any) => product[i].title === myProduct.title)
+					const wishlistedProduct: any = products.find((myProduct) => product[i].title === myProduct.title);
 					helper.push(wishlistedProduct);
 				}
-				console.log(2);
 				setWishlists(helper);
 			}
 		}
@@ -53,7 +52,6 @@ export default function Wishlists() {
 		if (products.length > 0) {
 			getWishlistProducts();
 		}
-		console.log(1)
 	}, [products])
 	
 	
@@ -82,6 +80,9 @@ export default function Wishlists() {
 							rate={product.rate}
 							discount={product.discount ? product.discount : 0}
 							ingredients={product.description}
+							productCode={product.product_code}
+							wishlists={wishlists}
+							setWishlists={setWishlists}
 						/>
 					)) : (
 						<div className="flex justify-items -mt-0 md:my-10 rtl overflow-x-hidden mx-auto">
