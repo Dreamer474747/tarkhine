@@ -102,11 +102,11 @@ export default function UserAuth() {
 						</div>
 					</li>
 					
-				) : (
+				) : !((/user/g).test(pathname)) ? (
 					<li>
 						<LoginOrRegisterBtn />
 					</li>
-				)
+				) : null
 			}
 		</>
 	)

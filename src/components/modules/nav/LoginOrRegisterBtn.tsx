@@ -1,10 +1,9 @@
 "use client";
 import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { setCookie, getCookie } from "cookies-next";
+import { useState } from "react";
 
-import { useState, useEffect } from "react";
+import { setCookie } from "cookies-next";
 
 import { EstedadSemiBold } from "@/app/Fonts";
 import { emailRegex, passwordRegex } from "u/constants";
@@ -26,8 +25,6 @@ import toast, { Toaster } from 'react-hot-toast';
 
 export default function LoginOrRegisterBtn() {
 	
-	const router = useRouter();
-	const pathname = usePathname();
 	// setCookie('key', 'value', options);
 	// getCookie('key', options); // => 'value'
 	

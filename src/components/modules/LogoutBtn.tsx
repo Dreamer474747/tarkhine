@@ -1,4 +1,9 @@
 "use client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+import { deleteCookie } from "cookies-next";
+
 import { EstedadSemiBold } from "@/app/Fonts";
 
 import { Button } from "ui/Button";
@@ -15,9 +20,21 @@ import {
 
 export default function LogoutBtn({ text } : { text: string }) {
 	
+	const router = useRouter();
+	const [open, setOpen] = useState(false);
+	
+	
+	const logout = () => {
+		
+		deleteCookie("token");
+		deleteCookie("refresh");
+		router.refresh();
+		
+	}
+	
 	
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen} >
 		
 			<DialogTrigger asChild>
 				<Button
@@ -53,12 +70,13 @@ export default function LogoutBtn({ text } : { text: string }) {
 				<DialogFooter className="mt-4">
 					<div className="mx-auto *:w-[117px]">
 						<Button
+							onClick={logout}
 							className="mr-3 bg-[#FFF2F2] hover:bg-[#FFF2F2] text-[#C30000]"
 						>
 							خروج
 						</Button>
 						
-						<Button>بازگشت</Button>
+						<Button onClick={() => setOpen(false)} >بازگشت</Button>
 					</div>
 				</DialogFooter>
 				
