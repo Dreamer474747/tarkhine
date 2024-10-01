@@ -45,7 +45,7 @@ export default function UserAuth() {
 			
 		} else if (!firstRender && !isUserLoggedIn && hasCookie("refresh")) {
 			refreshMyAccessToken();
-		} else if (pathname !== "/") {
+		} else if ((/user/g).test(pathname)) {
 			redirect("/");
 		}
 	})
