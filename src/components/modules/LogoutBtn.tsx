@@ -25,11 +25,9 @@ export default function LogoutBtn({ text } : { text: string }) {
 	
 	
 	const logout = () => {
-		
 		deleteCookie("token");
 		deleteCookie("refresh");
-		location.reload();
-		
+		router.refresh();
 	}
 	
 	

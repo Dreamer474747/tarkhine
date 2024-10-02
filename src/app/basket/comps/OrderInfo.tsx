@@ -1,5 +1,6 @@
 "use client";
 import { useContext } from "react";
+import { useRouter } from "next/navigation";
 
 import EmptyBasketModal from "./EmptyBasketModal";
 
@@ -9,17 +10,94 @@ import { Button } from "ui/Button";
 import { ProductsContext } from "@/components/contexts/ProductsProvider";
 import type { ProductsContextType, Product } from "u/types";
 
-import { toPersianNumber } from "u/helpers";
+import { refreshMyAccessToken } from "m/helper";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
+
+import { toPersianNumber, showSwal } from "u/helpers";
 
 type OrderInfoParams = {
 	totalPrice: number,
-	totalOffPrice: number
+	totalOffPrice: number,
+	branchCode: string,
+	showAddressInfo: boolean
 }
 
 
-export default function OrderInfo({ totalPrice, totalOffPrice }: OrderInfoParams) {
+export default function OrderInfo({ totalPrice, totalOffPrice, branchCode, showAddressInfo }: OrderInfoParams) {
 	
+	const router = useRouter();
 	const { cartLength } = useContext(ProductsContext) as ProductsContextType;
+	
+	
+	let order = [];
+	const sendReqToSubmitOrder = async () => {
+		
+		const token = getCookie("token");
+		
+		if (token) {
+			const res = await fetch(`${process.env.BASE_URL}/order/add/`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"Authorization": `Bearer ${token}`
+				},
+				body: JSON.stringify(order)
+			});
+			
+			if (res.status === 201) {
+				localStorage.clear();
+				location.reload();
+			}
+		
+		} else {
+			if (hasCookie("refresh")) {
+				await refreshMyAccessToken(router);
+				sendReqToSubmitOrder();
+			
+			} else {
+				return showSwal("اول باید به اکانتتان ورود کنید", "error", "باشه");
+			}
+		}
+	}
+	
+	const submitOrder = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		
+		if (!showAddressInfo) {
+			return showSwal("هنوز ادرس خود را وارد نکرده‌اید", "error", "باشه");
+		}
+		
+		const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+		
+		const orderedItems = [];
+		for (let i = 0; cart.length > i; i++) {
+			const obj = {
+				product_code: cart[i].productCode,
+				count: cart[i].count
+			}
+			
+			orderedItems.push(obj);
+		}
+		
+		const now = new Date();
+		const thirtyMinutesLater = new Date(now.getTime() + 30 * 60 * 1000);
+		
+		order = {
+			order_detail: {
+				total_price: totalPrice + 20_000,
+				total_discount: totalOffPrice,
+				delivery_time: thirtyMinutesLater,
+				deliver_type: "DELIVERY",
+				payment_type: "ONLINE",
+				order_description: "desc",
+				payment_status: "SUCCESSFUL",
+				branch_code: branchCode
+			},
+			order_items: orderedItems
+		}
+		
+		sendReqToSubmitOrder();
+	}
 	
 	
 	return (
@@ -76,7 +154,10 @@ export default function OrderInfo({ totalPrice, totalOffPrice }: OrderInfoParams
 				</p>
 			</div>
 			
-			<form className="w-full flex justify-end">
+			<form
+				onSubmit={submitOrder}
+				className="w-full flex justify-end"
+			>
 				
 				<Button
 					type="submit"

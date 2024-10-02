@@ -5,11 +5,12 @@ type BranchParams = {
 	src: string,
 	alt: string,
 	name: string,
-	address: string
+	address: string,
+	link: string
 }
 
 
-const Branch = ({ src, alt, name, address }: BranchParams) => {
+const Branch = ({ src, alt, name, address, link }: BranchParams) => {
 	
 	
 	return (
@@ -91,7 +92,7 @@ const Branch = ({ src, alt, name, address }: BranchParams) => {
 				</h6>
                 
                 <a
-                    href="#"
+                    href={link}
                     className={`card-button flex justify-items h-8 w-32
 					${name === "اقدسیه" && "mt-3"} border border-[#315f41] rounded
 					text-[#315F41] text-xs leading-[180%]`}

@@ -20,7 +20,7 @@ import Order from "./Order";
 export default function Orders() {
 	
 	
-	const orders = 0;
+	const orders = 1;
 	
 	return (
 		<div

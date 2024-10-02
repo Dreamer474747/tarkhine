@@ -147,6 +147,7 @@ export default function MenuProductCard({ src, alt, name, ingredients, price, di
 						price={price}
 						discount={discount}
 						rate={rate}
+						productCode={productCode}
 					/>
 				</div>
 			</div>

@@ -14,6 +14,7 @@ export default function Page() {
 			name: "اکباتان",
 			address: "شهرک اکباتان، فاز ۳، مجتمع تجاری کوروش، طبقه سوم",
 			phone: "۰۲۱-۵۴۸۹۱۲۵۰-۵۱",
+			link: "/branch/okbaataan"
 		},
 		{
 			src: "/images/contact-us-chaaloos.jpg",
@@ -21,6 +22,7 @@ export default function Page() {
 			name: "چالوس",
 			address: "چالوس، خیابان ۱۷ شهریور، بعد کوچه کوروش، جنب داروخانه دکتر میلانی",
 			phone: "۰۲۱-۵۴۸۹۱۲۵۲-۵۳",
+			link: "/branch/chaaloos"
 		},
 		{
 			src: "/images/contact-us-aqdasie.jpg",
@@ -28,6 +30,7 @@ export default function Page() {
 			name: "اقدسیه",
 			address: "خیابان اقدسیه ، نرسیده به میدان خیام، پلاک ۸",
 			phone: "۰۲۱-۵۴۸۹۱۲۵۴-۵۵",
+			link: "/branch/aqdasie"
 		},
 		{
 			src: "/images/contact-us-vanak.jpg",
@@ -35,6 +38,7 @@ export default function Page() {
 			name: "ونک",
 			address: "میدان ونک، خیابان فردوسی، نبش کوچه نیلوفر، پلاک ۲۶",
 			phone: "۰۲۱-۵۴۸۹۱۲۵۶-۵۷",
+			link: "/branch/vanak"
 		},
 	]
 	
@@ -68,6 +72,7 @@ export default function Page() {
 							name={branch.name}
 							address={branch.address}
 							phone={branch.phone}
+							link={branch.link}
 						/>
 					))
 				}

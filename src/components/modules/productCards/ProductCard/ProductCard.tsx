@@ -114,6 +114,7 @@ export default function ProductCard({ src, alt, name, price, discount, rate, tot
 					price={price}
 					discount={discount}
 					rate={rate}
+					productCode={productCode}
 				/>
 			</div>
 			

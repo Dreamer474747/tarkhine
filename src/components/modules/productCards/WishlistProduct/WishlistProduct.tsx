@@ -90,6 +90,7 @@ wishlists, setWishlists}: ProductParams) {
 					price={price}
 					discount={discount}
 					rate={rate}
+					productCode={productCode}
 				/>
 			</div>
 			

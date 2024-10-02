@@ -161,6 +161,11 @@ footer {
 }
 
 
+.swal-footer {
+	display: flex;
+	justify-content: center;
+}
+
 .ltr {
     direction: ltr;
 }
@@ -291,6 +296,7 @@ footer {
 		@apply opacity-100;
 	}
 }
+
 
 /* custom scrollbar */
 

@@ -16,10 +16,11 @@ type Product = {
 	price: number,
 	discount: number,
 	rate: number,
+	productCode: string
 }
 
 
-export default function AddToBasketBtn({ src, alt, name, ingredients, price, discount, rate }: Product) {
+export default function AddToBasketBtn({ src, alt, name, ingredients, price, discount, rate, productCode }: Product) {
 	
 	const [isButtonPressed, setIsButtonPressed] = useState(false);
 	
@@ -29,7 +30,7 @@ export default function AddToBasketBtn({ src, alt, name, ingredients, price, dis
 		
 		let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 		
-		cart.push({ src, alt, name, ingredients, price, discount, rate, count: 1 });
+		cart.push({ src, alt, name, ingredients, price, discount, rate, productCode, count: 1 });
 		
 		localStorage.setItem("cart", JSON.stringify(cart));
 		

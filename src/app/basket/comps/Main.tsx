@@ -21,6 +21,12 @@ export default function Main() {
 	const [totalPrice, setTotalPrice] = useState(0);
 	const [totalOffPrice, setTotalOffPrice] = useState(0);
 	
+	const [recipientName, setRecipientName] = useState("");
+	const [phone, setPhone] = useState<number | string>("");
+	const [address, setAddress] = useState("");
+	const [branchCode, setBranchCode] = useState("");
+	const [showAddressInfo, setShowAddressInfo] = useState(false);
+	
 	const calcTotalPrice = (products: Product[]) => {
 		
 		let helper = 0;
@@ -145,11 +151,24 @@ export default function Main() {
 							className={`w-full md:w-[48%] lg:w-[38%] h-full flex justify-between
 							md:justify-start flex-col`}
 						>
-							<Address />
+							<Address
+								recipientName={recipientName}
+								setRecipientName={setRecipientName}
+								phone={phone}
+								setPhone={setPhone}
+								address={address}
+								setAddress={setAddress}
+								branchCode={branchCode}
+								setBranchCode={setBranchCode}
+								showAddressInfo={showAddressInfo}
+								setShowAddressInfo={setShowAddressInfo}
+							/>
 							
 							<OrderInfo
 								totalPrice={totalPrice}
 								totalOffPrice={totalOffPrice}
+								branchCode={branchCode}
+								showAddressInfo={showAddressInfo}
 							/>
 						</div>
 					</>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { EstedadSemiBold } from "@/app/Fonts";
 
 import { Button } from "ui/Button";
@@ -9,9 +10,10 @@ type BranchParams = {
 	name: string,
 	address: string,
 	phone: string,
+	link: string
 }
 
-export default function Branch({ src, alt, name, address, phone }: BranchParams) {
+export default function Branch({ src, alt, name, address, phone, link }: BranchParams) {
 	
 	return (
 		<div
@@ -84,20 +86,12 @@ export default function Branch({ src, alt, name, address, phone }: BranchParams)
 					mb-4 lg:mb-0 w-full sm:w-[unset] flex justify-items
 					[&>*]:w-[33%] [&>*]:sm:w-[unset]`}
 				>
-					<Button
-						className={`bg-white text-primary border border-primary
-						ml-2 sm:ml-4 hover:bg-primary hover:text-white
-						h-6 sm:h-10 text-[10px] leading-[180%] sm:text-sm`}
+					<Link
+						href={link}
+						className="rounded bg-white text-primary h-10 border border-primary flex justify-items px-4 text-base"
 					>
 						صفحه شعبه
-					</Button>
-					
-					<Button
-						className={`hover:text-white
-						h-6 sm:h-10 text-[10px] leading-[180%] sm:text-sm`}
-					>
-						دیدن در نقشه
-					</Button>
+					</Link>
 				</div>
 				
 			</div>
