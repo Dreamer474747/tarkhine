@@ -1,7 +1,15 @@
+"use client";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useEffect, useState, useContext } from "react";
+import { getCookie, setCookie, hasCookie } from "cookies-next";
 
 import { ScrollArea } from "ui/ScrollArea";
 import { Separator } from "ui/Separator";
+
+import type { Order } from "u/types";
+
+import { refreshMyAccessToken } from "u/helpers";
 
 import {
   Carousel,
@@ -19,12 +27,53 @@ import Order from "./Order";
 
 export default function Orders() {
 	
+	const router = useRouter();
 	
-	const orders = 1;
+	const [orders, setOrders] = useState<Order[]>([]);
+	
+	useEffect(() => {
+		
+		const getAllOrders = async () => {
+			const token = getCookie("token");
+			
+			if (token) {
+				const res = await fetch(`${process.env.BASE_URL}/order/list/`, {
+					method: "GET",
+					headers: {
+						"Authorization": `Bearer ${token}`
+					},
+				});
+				console.log(res);
+				
+				const data = await res.json();
+				setOrders(data);
+				console.log(data);
+				
+			} else if (hasCookie("refresh")) {
+				await refreshMyAccessToken(router);
+				getAllOrders();
+			}
+		}
+		
+		getAllOrders();
+	}, [])
+	
+	
+	const calcLeftTime = (time: number) => {
+		
+		const leftTime = new Date(time).getTime() - new Date().getTime();
+		
+		if (leftTime > 0) {
+			return (leftTime / 1000).toFixed();
+		} else {
+			return 0;
+		}
+	}
+	
 	
 	return (
 		<div
-			className={`w-full ${orders ? "min-h-[400px]" : "h-fit"} md:border md:border-[#cbcbcb] rounded-lg md:px-4 ltr
+			className={`w-full ${orders.length ? "min-h-[400px]" : "h-fit"} md:border md:border-[#cbcbcb] rounded-lg md:px-4 ltr
 			max-h-[1186px] overflow-y-auto custom-scrollbar -pr-4`}
 		>
 			
@@ -36,68 +85,25 @@ export default function Orders() {
 			<Separator className="bg-[#cbcbcb] mt-2 mb-6 hidden md:block" />
 			
 			{
-				orders ? (
+				orders.length ? (
 					<div className="mb-4 rtl">
-						<Order
-							branchName="اقدسیه"
-							isDelivered="otw"
-							wasFoodReceived={null}
-							orderedDate="شنبه ۸ مرداد"
-							orderedHour="۱۸:۵۳"
-							price={228500}
-							discount={15}
-							secondsLeftToDeliver={750}
-							address="اقدسیه، بزرگراه ارتش، مجتمع شمیران سنتر، طبقه ۱۰"
-						/>
-						
-						<Order
-							branchName="اقدسیه"
-							isDelivered={false}
-							wasFoodReceived={true}
-							orderedDate="شنبه ۸ مرداد"
-							orderedHour="۱۸:۵۳"
-							price={228500}
-							discount={15}
-							secondsLeftToDeliver={750}
-							address="اقدسیه، بزرگراه ارتش، مجتمع شمیران سنتر، طبقه ۱۰"
-						/>
-						
-						<Order
-							branchName="اقدسیه"
-							isDelivered={true}
-							wasFoodReceived={true}
-							orderedDate="شنبه ۸ مرداد"
-							orderedHour="۱۸:۵۳"
-							price={228500}
-							discount={15}
-							secondsLeftToDeliver={750}
-							address="اقدسیه، بزرگراه ارتش، مجتمع شمیران سنتر، طبقه ۱۰"
-						/>
-						
-						<Order
-							branchName="اقدسیه"
-							isDelivered={false}
-							wasFoodReceived={false}
-							orderedDate="شنبه ۸ مرداد"
-							orderedHour="۱۸:۵۳"
-							price={228500}
-							discount={15}
-							secondsLeftToDeliver={750}
-							address="اقدسیه، بزرگراه ارتش، مجتمع شمیران سنتر، طبقه ۱۰"
-						/>
-						
-						<Order
-							branchName="اقدسیه"
-							isDelivered={true}
-							wasFoodReceived={false}
-							orderedDate="شنبه ۸ مرداد"
-							orderedHour="۱۸:۵۳"
-							price={228500}
-							discount={15}
-							secondsLeftToDeliver={750}
-							address="اقدسیه، بزرگراه ارتش، مجتمع شمیران سنتر، طبقه ۱۰"
-						/>
-						
+						{
+							orders.map((order, index) => (
+								<Order
+									key={order.order_code}
+									orderedItems={order.items}
+									orderCode={order.order_code}
+									branchName={order.branch.title}
+									wasFoodReceived={null}
+									orderedDate={order.delivery_time}
+									orderedHour={order.time}
+									price={+order.total_price}
+									discount={+order.total_discount}
+									secondsLeftToDeliver={calcLeftTime(order.delivery_time)}
+									address={order.branch.address}
+								/>
+							))
+						}
 					</div>
 				) : (
 					<div className="flex justify-items -mt-0 md:my-10 rtl overflow-x-hidden">

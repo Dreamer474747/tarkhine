@@ -40,6 +40,7 @@ export default function OrderTrackingProduct({ src, alt, count, name, price }: P
 			<p className="mt-[0.2rem]">{name}</p>
 			<p>
 				{toPersianNumber(price.toLocaleString())}
+				{" "}
 				تومان
 			</p>
 		</div>

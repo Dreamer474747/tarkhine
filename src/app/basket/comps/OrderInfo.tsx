@@ -29,7 +29,7 @@ export default function OrderInfo({ totalPrice, totalOffPrice, branchCode, showA
 	const { cartLength } = useContext(ProductsContext) as ProductsContextType;
 	
 	
-	let order = [];
+	let order: any = [];
 	const sendReqToSubmitOrder = async () => {
 		
 		const token = getCookie("token");

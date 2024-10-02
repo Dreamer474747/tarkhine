@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState, useContext } from "react";
 import { getCookie, setCookie, hasCookie } from "cookies-next";
@@ -7,8 +8,11 @@ import { ScrollArea } from "ui/ScrollArea";
 import { Separator } from "ui/Separator";
 
 import WishlistProduct from "m/productCards/WishlistProduct/WishlistProduct";
+
 import { ProductsContext } from "@/components/contexts/ProductsProvider";
 import type { ProductsContextType, Product } from "u/types";
+
+import { refreshMyAccessToken } from "u/helpers";
 
 import { EstedadSemiBold, EstedadMedium } from "@/app/Fonts";
 
@@ -16,6 +20,8 @@ import { EstedadSemiBold, EstedadMedium } from "@/app/Fonts";
 
 
 export default function Wishlists() {
+	
+	const router = useRouter();
 	
 	const { products } = useContext(ProductsContext) as ProductsContextType;
 	
@@ -43,6 +49,11 @@ export default function Wishlists() {
 					helper.push(wishlistedProduct);
 				}
 				setWishlists(helper);
+			}
+		} else {
+			if (hasCookie("refresh")) {
+				await refreshMyAccessToken(router);
+				getWishlistProducts();
 			}
 		}
 	}

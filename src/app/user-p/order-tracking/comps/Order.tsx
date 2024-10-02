@@ -1,4 +1,11 @@
+"use client";
+import { useContext, useState, useEffect } from "react";
+
+import { format, newDate } from 'date-fns-jalali';
+
 import OrderTrackingProduct from "m/productCards/OrderTrackingProduct/OrderTrackingProduct";
+import { ProductsContext } from "@/components/contexts/ProductsProvider";
+import type { ProductsContextType, Product, OrderItem } from "u/types";
 
 import { toPersianNumber } from "u/helpers";
 
@@ -13,23 +20,18 @@ import {
 
 import { Button } from "ui/Button";
 
-/*  1.if 'isDelivered' is otw, then the 'wasFoodReceived' is null because its on its way and we dont know whether the order
+/*  1.if 'wasFoodReceived' is null, its because the food is on its way and we dont know whether the order
 has arrived or not.
 
-2.if 'isDelivered' is false and the 'wasFoodReceived' is true, it means that the order was self pickuped by the orderer.
+3.if 'wasFoodReceived' is true, it means that the delivery was successfull.
 
-3.if 'isDelivered' is true and the 'wasFoodReceived' is true, it means that the order was deliverd by us and it was
-successfull.
-
-4.if 'isDelivered' is false and the 'wasFoodReceived' is false, it means that the orderer did not come to get his food.
-
-5.if 'isDelivered' is true and the 'wasFoodReceived' is false, it means that either we did a bad job at delivering the order,
-or the customers refused to pay.
+4.if 'wasFoodReceived' is false, it means that the orderer cancelled his order.
 */
 
 type OrderParams = {
+	orderedItems: OrderItem[],
+	orderCode: string,
 	branchName: string,
-	isDelivered: boolean | "otw", // otw === on the way
 	wasFoodReceived: boolean | null,
 	orderedDate: string,
 	orderedHour: string,
@@ -41,8 +43,46 @@ type OrderParams = {
 
 
 export default function Order(
-{ branchName, isDelivered, wasFoodReceived, orderedDate, orderedHour, price, discount, secondsLeftToDeliver, address }
-:OrderParams) {
+{ orderedItems, orderCode, branchName, wasFoodReceived, orderedDate, orderedHour, price, discount,
+secondsLeftToDeliver, address } :OrderParams) {
+	
+	const { products } = useContext(ProductsContext) as ProductsContextType;
+	
+	const [secondsLeft, setSecondsLeft] = useState(secondsLeftToDeliver);
+	
+	useEffect(() => {
+		
+		let myTimeout;
+		if (secondsLeftToDeliver) {
+			myTimeout = setTimeout(() => {
+				if (!secondsLeft) {
+					clearTimeout(myTimeout);
+				}
+				setSecondsLeft((prev: number) => prev - 1);
+				
+			}, 1000);
+		}
+		
+		return () => clearTimeout(myTimeout);
+	}, [secondsLeft])
+	
+	
+	const daysOfTheWeek = ["یکشنبه", "دوشنبه", "سه‌شنبه", "جهارشنبه", "پنجشنبه", "جمعه", "شنبه"];
+	
+	const date = new Date(orderedDate);
+	const nonJalaliDate = format(new Date(date.getFullYear(), date.getMonth() - 1, date.getDate() - 1), "yyyy-MM-dd");
+	const nonJalaliDateSplited = nonJalaliDate.split("-");
+	
+	const jalaliDate = format(newDate(+nonJalaliDateSplited[0], +nonJalaliDateSplited[1], +nonJalaliDateSplited[2]), "yyyy MMMM d");
+	const jalaliDateSplited = jalaliDate.split(" ");
+	
+	const myDate = `${daysOfTheWeek[date.getDay()]} ${jalaliDateSplited[2]} ${jalaliDateSplited[1]}`;
+	
+	
+	const findSrc = (title: string) => {
+		
+		return products.find((product: Product) => product.title === title)?.photo;
+	}
 	
 	
 	return (
@@ -54,7 +94,7 @@ export default function Order(
 			>
 				
 				<h6 className="text-xs sm:text-sm">
-					شعبه {branchName}
+					{branchName}
 				</h6>
 				
 				<div className="text-[10px] sm:text-xs flex">
@@ -62,32 +102,37 @@ export default function Order(
 						className={`bg-[#ededed] h-[22px] sm:h-[26px] rounded ml-2 leading-[22px] sm:leading-[26px]
 						text-center px-1 sm:px-2`}
 					>
-						{ (isDelivered === "otw" || isDelivered) ? "ارسال توسط پیک" : "تحویل حضوری" }
+						ارسال توسط پیک
 					</div>
 					
 					{
-						wasFoodReceived === null ? (
+						(wasFoodReceived === null && secondsLeft) ? (
 							<div
 								className={`bg-[#FFF8E1] text-[#A9791C] px-2 sm:px-4 h-[22px] sm:h-[26px] rounded
 								text-center leading-[22px] sm:leading-[26px]`}
 							>
 								جاری
 							</div>
-						) : !wasFoodReceived ? (
-							<div
-								className={`bg-[#FFF2F2] text-[#C30000] h-[22px] sm:h-[26px] rounded
-								text-center leading-[22px] sm:leading-[26px] px-1 sm:px-2`}
-							>
-								لغو شده
-							</div>
-						) : (
+							
+						) : (wasFoodReceived === null && !secondsLeft) || wasFoodReceived ? (
+							
 							<div
 								className={`bg-[#E5F2E9] text-primary h-[22px] sm:h-[26px] rounded
 								text-center leading-[22px] sm:leading-[26px] px-1 sm:px-2`}
 							>
 								تحویل داده شده
 							</div>
-						)
+							
+						) : !wasFoodReceived ? (
+							
+							<div
+								className={`bg-[#FFF2F2] text-[#C30000] h-[22px] sm:h-[26px] rounded
+								text-center leading-[22px] sm:leading-[26px] px-1 sm:px-2`}
+							>
+								لغو شده
+							</div>
+							
+						) : null
 					}
 					
 				</div>
@@ -110,27 +155,34 @@ export default function Order(
 							<path d="M13.6654 6.56006H2.33203C2.0587 6.56006 1.83203 6.33339 1.83203 6.06006C1.83203 5.78673 2.0587 5.56006 2.33203 5.56006H13.6654C13.9387 5.56006 14.1654 5.78673 14.1654 6.06006C14.1654 6.33339 13.9387 6.56006 13.6654 6.56006Z" fill="#717171"/>
 							<path d="M10.6667 15.1666H5.33333C2.9 15.1666 1.5 13.7666 1.5 11.3333V5.66659C1.5 3.23325 2.9 1.83325 5.33333 1.83325H10.6667C13.1 1.83325 14.5 3.23325 14.5 5.66659V11.3333C14.5 13.7666 13.1 15.1666 10.6667 15.1666ZM5.33333 2.83325C3.42667 2.83325 2.5 3.75992 2.5 5.66659V11.3333C2.5 13.2399 3.42667 14.1666 5.33333 14.1666H10.6667C12.5733 14.1666 13.5 13.2399 13.5 11.3333V5.66659C13.5 3.75992 12.5733 2.83325 10.6667 2.83325H5.33333Z" fill="#717171"/>
 						</svg>
-						{orderedDate}، ساعت {orderedHour}
+						{ myDate }
+						، ساعت {toPersianNumber(orderedHour)}
 					</p>
 					
 					<p className="mr-2 hidden lg:flex">
-						مبلغ: {toPersianNumber(price.toLocaleString())} تومان
-						<span className="mr-1">تخفیف: {toPersianNumber((price * discount/100).toLocaleString())} تومان</span>
+						مبلغ: { toPersianNumber(price.toLocaleString()) } تومان
+						<span className="mr-1">تخفیف: {toPersianNumber(discount.toLocaleString())} تومان</span>
 					</p>
 				</div>
 				
-				<p className="flex items-center text-[10px] sm:text-xs">
-					<svg className="ml-1 w-3 h-3 lg:w-4 lg:h-4" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M7.9987 15.1666C4.04536 15.1666 0.832031 11.9533 0.832031 7.99992C0.832031 4.04659 4.04536 0.833252 7.9987 0.833252C11.952 0.833252 15.1654 4.04659 15.1654 7.99992C15.1654 11.9533 11.952 15.1666 7.9987 15.1666ZM7.9987 1.83325C4.5987 1.83325 1.83203 4.59992 1.83203 7.99992C1.83203 11.3999 4.5987 14.1666 7.9987 14.1666C11.3987 14.1666 14.1654 11.3999 14.1654 7.99992C14.1654 4.59992 11.3987 1.83325 7.9987 1.83325Z" fill="#717171"/>
-						<path d="M10.4751 10.6199C10.3884 10.6199 10.3017 10.5999 10.2217 10.5466L8.15505 9.31326C7.64172 9.00659 7.26172 8.33326 7.26172 7.73992V5.00659C7.26172 4.73326 7.48839 4.50659 7.76172 4.50659C8.03505 4.50659 8.26172 4.73326 8.26172 5.00659V7.73992C8.26172 7.97992 8.46172 8.33326 8.66839 8.45326L10.7351 9.68659C10.9751 9.82659 11.0484 10.1333 10.9084 10.3733C10.8084 10.5333 10.6417 10.6199 10.4751 10.6199Z" fill="#717171"/>
-					</svg>
-					تحویل تا
-					<span className="mr-1 text-primary flex justify-items">
-						{toPersianNumber(Math.floor(secondsLeftToDeliver / 60))}
-						:
-						{toPersianNumber(Math.floor(secondsLeftToDeliver % 60))}
-					</span>
-				</p>
+				{
+					secondsLeft > 0 ? (
+						
+						<p className="flex items-center text-[10px] sm:text-xs">
+							<svg className="ml-1 w-3 h-3 lg:w-4 lg:h-4" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M7.9987 15.1666C4.04536 15.1666 0.832031 11.9533 0.832031 7.99992C0.832031 4.04659 4.04536 0.833252 7.9987 0.833252C11.952 0.833252 15.1654 4.04659 15.1654 7.99992C15.1654 11.9533 11.952 15.1666 7.9987 15.1666ZM7.9987 1.83325C4.5987 1.83325 1.83203 4.59992 1.83203 7.99992C1.83203 11.3999 4.5987 14.1666 7.9987 14.1666C11.3987 14.1666 14.1654 11.3999 14.1654 7.99992C14.1654 4.59992 11.3987 1.83325 7.9987 1.83325Z" fill="#717171"/>
+								<path d="M10.4751 10.6199C10.3884 10.6199 10.3017 10.5999 10.2217 10.5466L8.15505 9.31326C7.64172 9.00659 7.26172 8.33326 7.26172 7.73992V5.00659C7.26172 4.73326 7.48839 4.50659 7.76172 4.50659C8.03505 4.50659 8.26172 4.73326 8.26172 5.00659V7.73992C8.26172 7.97992 8.46172 8.33326 8.66839 8.45326L10.7351 9.68659C10.9751 9.82659 11.0484 10.1333 10.9084 10.3733C10.8084 10.5333 10.6417 10.6199 10.4751 10.6199Z" fill="#717171"/>
+							</svg>
+							تحویل تا
+							<span className="mr-1 text-primary flex justify-items">
+								{toPersianNumber(Math.floor(secondsLeft / 60))}
+								:
+								{toPersianNumber(Math.floor(secondsLeft % 60))}
+							</span>
+						</p>
+						
+					) : null
+				}
 				
 			</div>
 			
@@ -149,7 +201,7 @@ export default function Order(
 					<path d="M8 10.625H3.5C1.78 10.625 0.625 9.47 0.625 7.75V4.25C0.625 2.71 1.57499 1.595 3.04999 1.41C3.18499 1.39 3.34 1.375 3.5 1.375H8C8.12 1.375 8.275 1.38 8.435 1.405C9.91 1.575 10.875 2.695 10.875 4.25V4.97501C10.875 5.18001 10.705 5.35001 10.5 5.35001H9.45999C9.28499 5.35001 9.12501 5.415 9.01001 5.535L9.005 5.54001C8.865 5.67501 8.8 5.85999 8.815 6.04999C8.84 6.37999 9.15999 6.64499 9.51999 6.64499H10.5C10.705 6.64499 10.875 6.81499 10.875 7.01999V7.745C10.875 9.47 9.72 10.625 8 10.625ZM3.5 2.125C3.38 2.125 3.26499 2.13499 3.14999 2.14999C2.04999 2.28999 1.375 3.09 1.375 4.25V7.75C1.375 9.04 2.21 9.875 3.5 9.875H8C9.29 9.875 10.125 9.04 10.125 7.75V7.39999H9.51999C8.76499 7.39999 8.125 6.84 8.065 6.12C8.025 5.71 8.17501 5.30001 8.47501 5.01001C8.73501 4.74501 9.08499 4.60001 9.45999 4.60001H10.125V4.25C10.125 3.08 9.43999 2.27499 8.32999 2.14499C8.20999 2.12499 8.105 2.125 8 2.125H3.5Z" fill="#717171"/>
 				</svg>
 				مبلغ: {toPersianNumber(price.toLocaleString())} تومان
-				<span className="mr-1">تخفیف: {toPersianNumber((price * discount/100).toLocaleString())} تومان</span>
+				<span className="mr-1">تخفیف: {toPersianNumber(discount.toLocaleString())} تومان</span>
 			</p>
 			
 			<Carousel
@@ -162,17 +214,17 @@ export default function Order(
 				<CarouselContent className="-ml-3 select-none last:ml-0">
 					
 					{
-						Array.from({ length: 8 }).map((product, index) => (
+						products.length && orderedItems?.map((product, index) => (
 							<CarouselItem
 								key={index}
 								className="basis-[unset] pl-1"
 							>
 								<OrderTrackingProduct
-									src="/images/kookoo.jpg"
-									alt="kookoo-sabzi"
-									count={3}
-									name="کوکو سبزی"
-									price={270_000}
+									src={findSrc(product.product.title)}
+									alt={product.product.title}
+									count={+product.count}
+									name={product.product.title}
+									price={+product.product.price}
 								/>
 							</CarouselItem>
 						))
@@ -191,7 +243,8 @@ export default function Order(
 			
 			<div className="w-full text-center sm:text-end">
 				{
-					isDelivered === "otw" ? (
+					wasFoodReceived === null && secondsLeft ? (
+						
 						<Button
 							variant="outline"
 							className={`border-[#C30000] text-[#C30000] w-[94px] sm:w-[123px] h-8
@@ -199,6 +252,7 @@ export default function Order(
 						>
 							لغو سفارش
 						</Button>
+						
 					) : (
 						<Button
 							variant="outline"

@@ -26,4 +26,32 @@ type ProductsContextType = {
 	setCartLength: Dispatch<SetStateAction<number>>
 }
 
-export type { Product, ProductsContextType }
+
+type OrderItem = {
+	count: number,
+	product: {
+		price: number,
+		title: string
+	}
+}
+
+type Order = {
+	branch: {
+		title: string,
+		address: string
+	},
+	date: string,
+	deliver_type: string,
+	delivery_time: number,
+	items: OrderItem[],
+	order_code: string,
+	order_description: string,
+	payment_status: string,
+	payment_type: string,
+	status: string,
+	time: string,
+	total_discount: number,
+	total_price: number,
+}
+
+export type { Product, ProductsContextType, Order, OrderItem }

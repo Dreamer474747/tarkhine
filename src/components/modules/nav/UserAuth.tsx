@@ -33,6 +33,7 @@ export default function UserAuth() {
 			const data = await res.json();
 			setCookie("token", data.access, { maxAge: 60 });
 			router.refresh();
+			setIsUserLoggedIn(hasCookie("token"));
 		}
 	}
 	
