@@ -31,25 +31,29 @@ export default function UserAuth() {
 		
 		if (res.status === 200) {
 			const data = await res.json();
-			setCookie("token", data.access, { maxAge: 60 });
-			router.refresh();
-			setIsUserLoggedIn(hasCookie("token"));
+			setCookie("token", data.access, { maxAge: 15 });
+			setIsUserLoggedIn(true);
 		}
 	}
 	
 	useEffect(() => {
 		
-		setIsUserLoggedIn(hasCookie("token"));
-		
-		if (firstRender) {
-			firstRender = false;
-			
-		} else if (!firstRender && !isUserLoggedIn && hasCookie("refresh")) {
-			refreshMyAccessToken();
-		} else if ((/user/g).test(pathname)) {
-			redirect("/");
+		if (hasCookie("token")) {
+			setIsUserLoggedIn(true);
+		} else {
+			if (firstRender) {
+				firstRender = false;
+				
+			} else if (!isUserLoggedIn && hasCookie("refresh")) {
+				refreshMyAccessToken();
+			} else if ((/user/g).test(pathname)) {
+				redirect("/");
+			} else {
+				setIsUserLoggedIn(false);
+			}
 		}
-	})
+		
+	}, [isUserLoggedIn])
 	
 	
 	return (

@@ -152,7 +152,7 @@ branchCode, setBranchCode, setShowAddressInfo }: AddNewAddressParams) {
 						value={branchCode}
 						onValueChange={(value) => setBranchCode(value)}
 					>
-						<SelectTrigger className="w-full">
+						<SelectTrigger>
 							<SelectValue placeholder="شعبه" />
 						</SelectTrigger>
 						<SelectContent>

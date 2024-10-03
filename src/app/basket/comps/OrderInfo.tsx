@@ -1,5 +1,5 @@
 "use client";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import EmptyBasketModal from "./EmptyBasketModal";
@@ -11,8 +11,9 @@ import { ProductsContext } from "@/components/contexts/ProductsProvider";
 import type { ProductsContextType, Product } from "u/types";
 
 import { refreshMyAccessToken } from "m/helper";
-import { getCookie, hasCookie, setCookie } from "cookies-next";
+import { getCookie, hasCookie } from "cookies-next";
 
+import swal from "sweetalert";
 import { toPersianNumber, showSwal } from "u/helpers";
 
 type OrderInfoParams = {
@@ -27,10 +28,12 @@ export default function OrderInfo({ totalPrice, totalOffPrice, branchCode, showA
 	
 	const router = useRouter();
 	const { cartLength } = useContext(ProductsContext) as ProductsContextType;
-	
+	const [isPending, setIsPending] = useState(false);
 	
 	let order: any = [];
 	const sendReqToSubmitOrder = async () => {
+		
+		setIsPending(true);
 		
 		const token = getCookie("token");
 		
@@ -45,8 +48,19 @@ export default function OrderInfo({ totalPrice, totalOffPrice, branchCode, showA
 			});
 			
 			if (res.status === 201) {
-				localStorage.clear();
-				location.reload();
+				
+				swal({
+					title: "سفارش شما با موفقیت ثبت شد",
+					icon: "success",
+					buttons: ["عالی", "بازگشت"],
+				}).then(async (result) => {
+					localStorage.clear();
+					location.reload();
+				});
+				
+			} else {
+				setIsPending(false);
+				showSwal("مشکلی پیش امد، دوباره تلاش کنید", "error", "باشه");
 			}
 		
 		} else {
@@ -161,6 +175,7 @@ export default function OrderInfo({ totalPrice, totalOffPrice, branchCode, showA
 				
 				<Button
 					type="submit"
+					disabled={isPending}
 					className="w-[240px] md:w-full text-sm sm:text-base submit-order-btn"
 				>
 					<svg className="ml-2" width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">

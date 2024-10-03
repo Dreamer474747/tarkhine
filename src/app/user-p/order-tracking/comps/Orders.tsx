@@ -7,7 +7,7 @@ import { getCookie, setCookie, hasCookie } from "cookies-next";
 import { ScrollArea } from "ui/ScrollArea";
 import { Separator } from "ui/Separator";
 
-import type { Order } from "u/types";
+import type { Order as OrderType } from "u/types";
 
 import { refreshMyAccessToken } from "u/helpers";
 
@@ -29,7 +29,7 @@ export default function Orders() {
 	
 	const router = useRouter();
 	
-	const [orders, setOrders] = useState<Order[]>([]);
+	const [orders, setOrders] = useState<OrderType[]>([]);
 	
 	useEffect(() => {
 		
@@ -43,11 +43,10 @@ export default function Orders() {
 						"Authorization": `Bearer ${token}`
 					},
 				});
-				console.log(res);
 				
 				const data = await res.json();
-				setOrders(data);
-				console.log(data);
+				setOrders(data.reverse());
+				
 				
 			} else if (hasCookie("refresh")) {
 				await refreshMyAccessToken(router);
@@ -59,14 +58,26 @@ export default function Orders() {
 	}, [])
 	
 	
-	const calcLeftTime = (time: number) => {
+	const calcLeftTime = (time: string) => {
 		
 		const leftTime = new Date(time).getTime() - new Date().getTime();
 		
 		if (leftTime > 0) {
-			return (leftTime / 1000).toFixed();
+			return +(leftTime / 1000).toFixed();
 		} else {
 			return 0;
+		}
+	}
+	
+	
+	const wasFoodReceivedHandler = (status: string, leftTime: number) => {
+		
+		if (status === "CANCELED") {
+			return false;
+		} else if (status === "CURRENT" && !leftTime) {
+			return true;
+		} else {
+			return null;
 		}
 	}
 	
@@ -88,13 +99,13 @@ export default function Orders() {
 				orders.length ? (
 					<div className="mb-4 rtl">
 						{
-							orders.map((order, index) => (
+							orders.map((order: OrderType, index) => (
 								<Order
 									key={order.order_code}
 									orderedItems={order.items}
 									orderCode={order.order_code}
 									branchName={order.branch.title}
-									wasFoodReceived={null}
+									wasFoodReceived={wasFoodReceivedHandler(order.status, calcLeftTime(order.delivery_time))}
 									orderedDate={order.delivery_time}
 									orderedHour={order.time}
 									price={+order.total_price}

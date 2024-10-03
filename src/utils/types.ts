@@ -42,7 +42,7 @@ type Order = {
 	},
 	date: string,
 	deliver_type: string,
-	delivery_time: number,
+	delivery_time: string,
 	items: OrderItem[],
 	order_code: string,
 	order_description: string,

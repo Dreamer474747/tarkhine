@@ -9,6 +9,9 @@ import type { ProductsContextType, Product, OrderItem } from "u/types";
 
 import { toPersianNumber } from "u/helpers";
 
+import CancelOrderButton from "./CancelOrderButton";
+import ReorderBtn from "./ReorderBtn";
+
 import {
   Carousel,
   CarouselContent,
@@ -52,10 +55,10 @@ secondsLeftToDeliver, address } :OrderParams) {
 	
 	useEffect(() => {
 		
-		let myTimeout;
+		let myTimeout: any;
 		if (secondsLeftToDeliver) {
 			myTimeout = setTimeout(() => {
-				if (!secondsLeft) {
+				if (secondsLeft > 0) {
 					clearTimeout(myTimeout);
 				}
 				setSecondsLeft((prev: number) => prev - 1);
@@ -79,10 +82,10 @@ secondsLeftToDeliver, address } :OrderParams) {
 	const myDate = `${daysOfTheWeek[date.getDay()]} ${jalaliDateSplited[2]} ${jalaliDateSplited[1]}`;
 	
 	
-	const findSrc = (title: string) => {
-		
-		return products.find((product: Product) => product.title === title)?.photo;
-	}
+	const findSrc = (title: string) => products.find((product: Product) => product.title === title)?.photo;
+	
+	
+	
 	
 	
 	return (
@@ -106,7 +109,7 @@ secondsLeftToDeliver, address } :OrderParams) {
 					</div>
 					
 					{
-						(wasFoodReceived === null && secondsLeft) ? (
+						(wasFoodReceived === null && secondsLeft > 0) ? (
 							<div
 								className={`bg-[#FFF8E1] text-[#A9791C] px-2 sm:px-4 h-[22px] sm:h-[26px] rounded
 								text-center leading-[22px] sm:leading-[26px]`}
@@ -166,7 +169,7 @@ secondsLeftToDeliver, address } :OrderParams) {
 				</div>
 				
 				{
-					secondsLeft > 0 ? (
+					wasFoodReceived === null ? (
 						
 						<p className="flex items-center text-[10px] sm:text-xs">
 							<svg className="ml-1 w-3 h-3 lg:w-4 lg:h-4" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -220,7 +223,7 @@ secondsLeftToDeliver, address } :OrderParams) {
 								className="basis-[unset] pl-1"
 							>
 								<OrderTrackingProduct
-									src={findSrc(product.product.title)}
+									src={findSrc(product.product.title) as string}
 									alt={product.product.title}
 									count={+product.count}
 									name={product.product.title}
@@ -243,24 +246,10 @@ secondsLeftToDeliver, address } :OrderParams) {
 			
 			<div className="w-full text-center sm:text-end">
 				{
-					wasFoodReceived === null && secondsLeft ? (
-						
-						<Button
-							variant="outline"
-							className={`border-[#C30000] text-[#C30000] w-[94px] sm:w-[123px] h-8
-							hover:bg-[] hover:text-[] mt-4 text-xs`}
-						>
-							لغو سفارش
-						</Button>
-						
+					wasFoodReceived === null && secondsLeft > 0 ? (
+						<CancelOrderButton orderCode={orderCode} />
 					) : (
-						<Button
-							variant="outline"
-							className={`border-primary text-primary w-[123px] h-8 text-xs
-							hover:bg-[] hover:text-[] mt-4`}
-						>
-							سفارش مجدد
-						</Button>
+						<ReorderBtn />
 					)
 				}
 				
