@@ -31,7 +31,7 @@ export default function ReorderBtn({ orderedItems }: { orderedItems: OrderItem[]
 		
 		for (let i = 0; orderedItems.length > i; i++) {
 			
-			const product = products.find((product: Product) => product.title === orderedItems[i].product.title);
+			const product = products.find((product: Product) => product.title === orderedItems[i].product.title) as Product;
 			
 			const obj = {
 				src: product.photo,

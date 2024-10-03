@@ -68,7 +68,7 @@ export default function ProductCard({ src, alt, name, price, discount, rate, tot
 										٪{toPersianNumber(discount)}
 									</Badge>
 								</div>
-							) : ""
+							) : null
 						}
 					</div>
 					
@@ -85,7 +85,9 @@ export default function ProductCard({ src, alt, name, price, discount, rate, tot
 							<p
 								className={`${EstedadMedium} text-[14px] leading-[24px]
 								mr-1`}
-							>۵</p>
+							>
+								{toPersianNumber(rate)}
+							</p>
 							
 							<p
 								className={`text-[10px] leading-[180%] mr-1 text-[#adadad] hidden md:block`}

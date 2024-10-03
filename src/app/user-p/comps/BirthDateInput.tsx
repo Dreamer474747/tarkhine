@@ -11,24 +11,24 @@ import "react-multi-date-picker/styles/colors/green.css"
 
 type BirthDateInputParams = {
 	canChangeData: boolean,
-	value: any,
-	setValue: any
+	birthdayInput: any,
+	setBirthdayInput: any
 }
 
 
-export default function BirthDateInput({ canChangeData, value, setValue }: BirthDateInputParams) {
+export default function BirthDateInput({ canChangeData, birthdayInput, setBirthdayInput }: BirthDateInputParams) {
 	
 	
 	
 	const changeHandler = (event: any) => {
 		const date = new Date(event);
-		setValue(date);
+		setBirthdayInput(date);
 	}
 	
 	
 	return (
 		<DatePicker
-			render={<CustomInput value={value} onChange={changeHandler} canChangeData={canChangeData} />}
+			render={<CustomInput value={birthdayInput} onChange={changeHandler} canChangeData={canChangeData} />}
 			renderButton={(direction: any, handleClick: any) => (
 				<button className="mx-2" onClick={handleClick}>
 					{direction === "right" ? (
@@ -48,7 +48,7 @@ export default function BirthDateInput({ canChangeData, value, setValue }: Birth
 			calendar={persian}
 			locale={persian_fa}
 			calendarPosition="bottom-right"
-			value={value}
+			value={birthdayInput}
 			onChange={(event) => changeHandler(event)}
 		/>
 	)

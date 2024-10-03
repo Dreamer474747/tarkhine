@@ -54,4 +54,9 @@ type Order = {
 	total_price: number,
 }
 
-export type { Product, ProductsContextType, Order, OrderItem }
+type ServicesContextType = {
+	isPending: boolean,
+	setIsPending: Dispatch<SetStateAction<boolean>>
+}
+
+export type { Product, ProductsContextType, Order, OrderItem, ServicesContextType }

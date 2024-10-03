@@ -406,13 +406,6 @@ footer {
     .branch:hover .branch-actions {
 		opacity: 1;
 	}
-	
-	.branch:hover .branch-image {
-		filter: brightness(0.6);
-	}
-	.branch:hover .branch-image-svg {
-		opacity: 1;
-	}
 }
 
 @media (min-width: 1200px) {

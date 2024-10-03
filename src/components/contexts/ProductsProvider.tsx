@@ -4,7 +4,7 @@ import { createContext, useState, useEffect } from "react";
 import type { Product, ProductsContextType } from "u/types";
 
 
-export const ProductsContext = createContext<ProductsContextType | null>(null)
+export const ProductsContext = createContext<ProductsContextType | null>(null);
 
 export default function ProductsProvider({ children }: { children: React.ReactNode }) {
 	

@@ -1,7 +1,7 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { getCookie, setCookie, hasCookie } from "cookies-next";
+import { useRouter, redirect } from "next/navigation";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { getCookie, hasCookie } from "cookies-next";
 
 import BirthDateInput from "./BirthDateInput";
 
@@ -15,9 +15,15 @@ import { EstedadMedium } from "@/app/Fonts";
 
 import type { Value } from "react-multi-date-picker";
 
+type PersonalDataFormParams = {
+	phoneNumber: string | number,
+	setPhoneNumber: Dispatch<SetStateAction<string | number>>,
+	nickName: string,
+	setNickName: Dispatch<SetStateAction<string>>,
+}
 
 
-export default function PersonalDataForm() {
+export default function PersonalDataForm({ phoneNumber, setPhoneNumber, nickName, setNickName } : PersonalDataFormParams) {
 	
 	const router = useRouter();
 	
@@ -26,11 +32,7 @@ export default function PersonalDataForm() {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [email, setEmail] = useState("");
-	const [phoneNumber, setPhoneNumber] = useState("");
-	const [nickName, setNickName] = useState("");
-	
-	const [value, setValue] = useState<Value>(new Date());
-	// this one is for birthday input. im too lazy rn to change the name in two different files.
+	const [birthdayInput, setBirthdayInput] = useState<Value>(new Date());
 	
 	
 	
@@ -60,10 +62,12 @@ export default function PersonalDataForm() {
 		
 	}, [])
 	
-	async function submitNewUserData(event: React.FormEvent<HTMLFormElement>) {
-		event.preventDefault();
+	
+	
+	async function submitNewUserData(event?: React.FormEvent<HTMLFormElement>) {
+		event?.preventDefault();
 		
-		if (!firstName.trim() || !lastName.trim() || !email.trim() || !phoneNumber.trim()) {
+		if (!firstName.trim() || !lastName.trim() || !email.trim() || !(`${phoneNumber}`).trim()) {
 			return showSwal("یکی از فیلدهای اجباری خالی است", "error", "باشه");
 		}
 		
@@ -72,17 +76,36 @@ export default function PersonalDataForm() {
 			return showSwal("ایمیل وارد شده معتبر نیست", "error", "باشه");
 		}
 		
-		const token = getCookie("token");
-		
 		const userData = {
 			first_name: firstName,
 			last_name: lastName,
 			username: email,
 			phone_number: phoneNumber,
 			nick_name: nickName,
-			birth_date: value
+			birth_date: birthdayInput
 		}
-		console.log(userData);
+		
+		const token = getCookie("token");
+		if (token) {
+			const res = await fetch(`${process.env.BASE_URL}/profile/edit/`, {
+				method: "PUT",
+				headers: {
+					"Authorization": `Bearer ${token}`
+				},
+				body: JSON.stringify({ userData })
+			});
+			
+			console.log(res)
+			const data = await res.json();
+			console.log(data);
+		
+		} else if (hasCookie("refresh")) {
+			await refreshMyAccessToken(router);
+			submitNewUserData();
+		} else {
+			redirect("/");
+		}
+		
 		/*
 			birth_date: Sun Sep 29 2024 21:07:59 GMT+0330 (Iran Standard Time) {}
 			first_name: "۱۱۱۱۱۱۱۱۱"
@@ -91,14 +114,6 @@ export default function PersonalDataForm() {
 			phone_number: "432432432"
 			username: "sjkfhj@fkjsl.com"
 		*/
-		
-		const res = await fetch(`${process.env.BASE_URL}/profile/edit/`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				"Authorization": `Bearer ${token}`
-			}
-		});
 	}
 	
 	
@@ -155,8 +170,8 @@ export default function PersonalDataForm() {
 			>
                 <BirthDateInput
 					canChangeData={canChangeData}
-					value={value}
-					setValue={setValue}
+					birthdayInput={birthdayInput}
+					setBirthdayInput={setBirthdayInput}
 				/>
 				<Input
 					disabled={!canChangeData}

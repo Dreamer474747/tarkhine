@@ -10,11 +10,13 @@ import LogoutBtn from "m/LogoutBtn";
 import { Separator } from "ui/Separator";
 
 type UserActionsParams = {
-	setShowContent?: Dispatch<SetStateAction<boolean>>
+	setShowContent?: Dispatch<SetStateAction<boolean>>,
+	phoneNumber?: string | number,
+	nickName?: string
 }
 
 
-export default function UserActions({ setShowContent }: UserActionsParams) {
+export default function UserActions({ setShowContent, phoneNumber, nickName }: UserActionsParams) {
 	
 	const pathname = usePathname();
 	
@@ -35,8 +37,12 @@ export default function UserActions({ setShowContent }: UserActionsParams) {
 				/>
 				
 				<div className="mr-4 lg--xl:mr-6 mt-5">
-					<h4 className="leading-[180%]">کاربر ترخینه</h4>
-					<p className="text-[#717171] text-xs ltr">۰۹۱۴ ۸۶۴ ۳۳۵۰</p>
+					<h4 className="leading-[180%]">
+						{ nickName ? nickName : "کاربر ترخینه" }
+					</h4>
+					<p className="text-[#717171] text-xs ltr">
+						{ phoneNumber ? phoneNumber : null }
+					</p>
 				</div>
 			</div>
 			

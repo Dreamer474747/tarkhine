@@ -34,9 +34,11 @@ export default function UnwishlistProduct({ name, productCode, wishlists, setWis
 	const router = useRouter();
 	
 	const [open, setOpen] = useState(false);
+	const [isPending, setIsPending] = useState(false);
 	
 	const Unwishlist = async () => {
 		
+		setIsPending(true);
 		const token = getCookie("token");
 		
 		if (token) {
@@ -49,18 +51,20 @@ export default function UnwishlistProduct({ name, productCode, wishlists, setWis
 				body: JSON.stringify({ product_code: productCode })
 			});
 			
-			console.log(res)
-			const data = await res.json();
-			console.log(data);
+			if (res.status !== 202) {
+				return showSwal("مشکلی پیش امد، دوباره تلاش کنید", "error", "باشه");
+			}
 			
 			const newWishlist = wishlists.filter((product: Product) => product.title !== name);
 			setWishlists(newWishlist);
+			setIsPending(false);
 			setOpen(false);
-		
+			
 		} else {
 			
 			await refreshMyAccessToken(router);
 			Unwishlist();
+			setIsPending(false);
 		}
 	}
 	
@@ -101,6 +105,7 @@ export default function UnwishlistProduct({ name, productCode, wishlists, setWis
 					<div className="mx-auto *:w-[117px]">
 						<Button
 							onClick={Unwishlist}
+							disabled={isPending}
 							className="mr-3 bg-[#FFF2F2] hover:bg-[#FFF2F2] text-[#C30000]"
 						>
 							حذف
