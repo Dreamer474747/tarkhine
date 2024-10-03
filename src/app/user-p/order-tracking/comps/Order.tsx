@@ -4,6 +4,7 @@ import { useContext, useState, useEffect } from "react";
 import { format, newDate } from 'date-fns-jalali';
 
 import OrderTrackingProduct from "m/productCards/OrderTrackingProduct/OrderTrackingProduct";
+
 import { ProductsContext } from "@/components/contexts/ProductsProvider";
 import type { ProductsContextType, Product, OrderItem } from "u/types";
 
@@ -52,11 +53,13 @@ secondsLeftToDeliver, address } :OrderParams) {
 	const { products } = useContext(ProductsContext) as ProductsContextType;
 	
 	const [secondsLeft, setSecondsLeft] = useState(secondsLeftToDeliver);
+	const [isFoodReceived, setIsFoodReceived] = useState(wasFoodReceived);
+	
 	
 	useEffect(() => {
 		
 		let myTimeout: any;
-		if (secondsLeftToDeliver) {
+		if (wasFoodReceived === null && secondsLeftToDeliver > 0) {
 			myTimeout = setTimeout(() => {
 				if (secondsLeft > 0) {
 					clearTimeout(myTimeout);
@@ -85,9 +88,6 @@ secondsLeftToDeliver, address } :OrderParams) {
 	const findSrc = (title: string) => products.find((product: Product) => product.title === title)?.photo;
 	
 	
-	
-	
-	
 	return (
 		<div
 			className={`w-full h-fit rounded border mb-3 *:px-2 md:*:px-5 pt-3 pb-3 sm:pb-6 text-[#717171]`}
@@ -109,7 +109,7 @@ secondsLeftToDeliver, address } :OrderParams) {
 					</div>
 					
 					{
-						(wasFoodReceived === null && secondsLeft > 0) ? (
+						(isFoodReceived === null && secondsLeft > 0) ? (
 							<div
 								className={`bg-[#FFF8E1] text-[#A9791C] px-2 sm:px-4 h-[22px] sm:h-[26px] rounded
 								text-center leading-[22px] sm:leading-[26px]`}
@@ -117,7 +117,7 @@ secondsLeftToDeliver, address } :OrderParams) {
 								جاری
 							</div>
 							
-						) : (wasFoodReceived === null && !secondsLeft) || wasFoodReceived ? (
+						) : (isFoodReceived === null && !secondsLeft) || isFoodReceived ? (
 							
 							<div
 								className={`bg-[#E5F2E9] text-primary h-[22px] sm:h-[26px] rounded
@@ -126,7 +126,7 @@ secondsLeftToDeliver, address } :OrderParams) {
 								تحویل داده شده
 							</div>
 							
-						) : !wasFoodReceived ? (
+						) : !isFoodReceived ? (
 							
 							<div
 								className={`bg-[#FFF2F2] text-[#C30000] h-[22px] sm:h-[26px] rounded
@@ -169,7 +169,7 @@ secondsLeftToDeliver, address } :OrderParams) {
 				</div>
 				
 				{
-					wasFoodReceived === null ? (
+					isFoodReceived === null && secondsLeft > 0 ? (
 						
 						<p className="flex items-center text-[10px] sm:text-xs">
 							<svg className="ml-1 w-3 h-3 lg:w-4 lg:h-4" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -246,10 +246,10 @@ secondsLeftToDeliver, address } :OrderParams) {
 			
 			<div className="w-full text-center sm:text-end">
 				{
-					wasFoodReceived === null && secondsLeft > 0 ? (
-						<CancelOrderButton orderCode={orderCode} />
+					isFoodReceived === null && secondsLeft > 0 ? (
+						<CancelOrderButton orderCode={orderCode} setIsFoodReceived={setIsFoodReceived} />
 					) : (
-						<ReorderBtn />
+						<ReorderBtn orderedItems={orderedItems} />
 					)
 				}
 				

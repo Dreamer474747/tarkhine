@@ -10,7 +10,7 @@ import { Button } from "ui/Button";
 import { ProductsContext } from "@/components/contexts/ProductsProvider";
 import type { ProductsContextType, Product } from "u/types";
 
-import { refreshMyAccessToken } from "m/helper";
+import { refreshMyAccessToken } from "m/helpers";
 import { getCookie, hasCookie } from "cookies-next";
 
 import swal from "sweetalert";

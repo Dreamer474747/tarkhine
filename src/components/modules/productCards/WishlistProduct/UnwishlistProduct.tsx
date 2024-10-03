@@ -7,7 +7,7 @@ import { EstedadSemiBold } from "@/app/Fonts";
 import { showSwal } from "u/helpers";
 import { getCookie } from "cookies-next";
 
-import { refreshMyAccessToken } from "m/helper";
+import { refreshMyAccessToken } from "m/helpers";
 import { Product } from "u/types";
 
 import { Button } from "ui/Button";

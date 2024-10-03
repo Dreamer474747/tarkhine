@@ -1,6 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { EstedadSemiBold } from "@/app/Fonts";
+
+import { ProductsContext } from "@/components/contexts/ProductsProvider";
+import type { ProductsContextType, Product, OrderItem } from "u/types";
+
+import { showSwal } from "u/helpers";
 
 import { Button } from "ui/Button";
 import {
@@ -15,13 +20,41 @@ import {
 
 
 
-export default function ReorderBtn() {
+export default function ReorderBtn({ orderedItems }: { orderedItems: OrderItem[] }) {
 	
+	const { products, setCartLength } = useContext(ProductsContext) as ProductsContextType;
 	const [open, setOpen] = useState(false);
 	
 	const reorder = () => {
 		
+		const orderProducts = [];
 		
+		for (let i = 0; orderedItems.length > i; i++) {
+			
+			const product = products.find((product: Product) => product.title === orderedItems[i].product.title);
+			
+			const obj = {
+				src: product.photo,
+				alt: product.title,
+				name: product.title,
+				ingredients: product.description,
+				price: product.price,
+				discount: product.discount,
+				rate: product.rate,
+				productCode: product.product_code,
+				count: orderedItems[i].count,
+			}
+			
+			orderProducts.push(obj);
+		}
+		
+		console.log(orderProducts);
+		
+		localStorage.setItem("cart", JSON.stringify(orderProducts));
+		setCartLength(orderProducts.length);
+		
+		showSwal("سفارش با موفقیت به سبد خریدتان اضافه شد، لطفا سبد خریدتان را مشاهده کنید", "success", "باشه");
+		setOpen(false);
 	}
 	
 	

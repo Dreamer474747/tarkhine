@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { showSwal } from "u/helpers";
 import { getCookie, hasCookie } from "cookies-next";
-import { refreshMyAccessToken } from "m/helper";
+import { refreshMyAccessToken } from "m/helpers";
 
 
 export default function WishlistBtn({ productCode }: { productCode: string }) {

@@ -42,7 +42,7 @@ export default function Wishlists() {
 			const { product } = await res.json();
 			const helper: Product[] = []
 			
-			if (product.length) {
+			if (product?.length) {
 				for (let i = 0; product.length > i; i++) {
 					
 					const wishlistedProduct: any = products.find((myProduct) => product[i].title === myProduct.title);

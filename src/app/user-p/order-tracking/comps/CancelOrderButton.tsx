@@ -1,9 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { EstedadSemiBold } from "@/app/Fonts";
 
-import { refreshMyAccessToken } from "m/helper";
+import { refreshMyAccessToken } from "m/helpers";
 import { getCookie, hasCookie } from "cookies-next";
 
 import swal from "sweetalert";
@@ -20,9 +20,13 @@ import {
   DialogTrigger,
 } from "ui/Dialog";
 
+type CancelOrderButtonParams = {
+	orderCode: string,
+	setIsFoodReceived: Dispatch<SetStateAction<boolean | null>>
+}
 
 
-export default function CancelOrderButton({ orderCode }: { orderCode: string }) {
+export default function CancelOrderButton({ orderCode, setIsFoodReceived }: CancelOrderButtonParams) {
 	
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
@@ -45,14 +49,8 @@ export default function CancelOrderButton({ orderCode }: { orderCode: string }) 
 			console.log(data)
 			
 			if (res.status === 202) {
-				
-				swal({
-					title: "سفارش شما لغو شد",
-					icon: "info",
-					buttons: ["باشه", "بازگشت"],
-				}).then(async (result: boolean) => {
-					location.reload();
-				});
+				setIsFoodReceived(false);
+				showSwal("سفارش شما لغو شد", "info", "باشه");
 				
 			} else {
 				setIsPending(false);
