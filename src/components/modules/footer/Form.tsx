@@ -1,10 +1,18 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import { toPersianNumber, showSwal } from "u/helpers";
+import { emailRegex } from "u/constants";
+
+import { Button } from "ui/Button";
+
+import { ServicesContext } from "@/components/contexts/ServicesProvider";
+import type { ServicesContextType } from "u/types";
 
 
 const Form = () => {
+	
+	const { isPending, setIsPending } = useContext(ServicesContext) as ServicesContextType;
 	
 	const [name, setName] = useState("");
 	const [phone, setPhone] = useState("");
@@ -12,18 +20,24 @@ const Form = () => {
 	const [message, setMessage] = useState("");
 	
 	
-	const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-	
 	const sendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		
 		if (!name.trim() || !phone.trim() || !message.trim()) {
 			return showSwal("حداقل یکی از فیلدهای اجباری خالی است", "error", "باشه");
+			
+		} else if (phone.toString().length < 11) {
+			return showSwal("شماره موبایل نمی‌تواند کمتر از ۱۱ عدد باشد", "error", "باشه");
+			
+		} else if (message.length < 10) {
+			return showSwal("پیام ارسالی نمی‌تواند کمتر از ۱۰ کارکتر باشد", "error", "باشه");
 		}
 		
-		const isEmailValid = email.match(emailRegex);
-		if (!isEmailValid) {
-			return showSwal("ایمیل وارد شده معتبر نیست", "error", "باشه");
+		if (email) {
+			const isEmailValid = email.match(emailRegex);
+			if (!isEmailValid) {
+				return showSwal("ایمیل وارد شده معتبر نیست", "error", "باشه");
+			}
 		}
 		
 		let messageObj: {
@@ -32,9 +46,12 @@ const Form = () => {
 			message: string,
 			email?: string
 		} = { name, phone_number: phone, message }
+		
 		if (email) {
 			messageObj.email = email
 		}
+		
+		setIsPending(true);
 		
 		const res = await fetch(`${process.env.BASE_URL}/contact-us/`, {
 			method: "POST",
@@ -44,14 +61,18 @@ const Form = () => {
 			body: JSON.stringify(messageObj)
 		});
 		
-		if (res.ok) {
+		if (res.status === 201) {
 			setName("");
 			setPhone("");
 			setEmail("");
 			setMessage("");
 			
-			return showSwal("پیام شما با موفقیت ارسال شد", "success", "عالی");
+			showSwal("پیام شما با موفقیت ارسال شد", "success", "عالی");
+			
+		} else {
+			showSwal("مشکلی پیش امد، دوباره تلاش کنید", "error", "باشه");
 		}
+		setIsPending(false);
 	}
 	
 	
@@ -90,7 +111,7 @@ const Form = () => {
 							type="email"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
-							className="custom-placeholder ltr"
+							className="custom-placeholder focus:ltr"
 						/>
 					</div>
 	
@@ -108,13 +129,14 @@ const Form = () => {
 						{toPersianNumber(message.length)}/۲۰۰
 					</p>
 				</div>
-				<button
+				<Button
 					type="submit"
+					disabled={isPending}
 					className={`text-white w-[163px] h-10 border border-[#717171] rounded
-					absolute -bottom-16 left-0`}
+					absolute -bottom-16 left-0 p-0 m-0 bg-transparent hover:bg-transparent`}
 				>
 					ارسال پیام
-				</button>
+				</Button>
 			</form>
 		</div>
 	)
