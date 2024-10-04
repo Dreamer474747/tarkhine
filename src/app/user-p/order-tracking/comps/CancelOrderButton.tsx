@@ -46,7 +46,6 @@ export default function CancelOrderButton({ orderCode, setIsFoodReceived }: Canc
 				body: JSON.stringify({ order_code: orderCode })
 			});
 			const data = await res.json();
-			console.log(data)
 			
 			if (res.status === 202) {
 				setIsFoodReceived(false);

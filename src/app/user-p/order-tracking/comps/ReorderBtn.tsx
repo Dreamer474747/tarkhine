@@ -48,8 +48,6 @@ export default function ReorderBtn({ orderedItems }: { orderedItems: OrderItem[]
 			orderProducts.push(obj);
 		}
 		
-		console.log(orderProducts);
-		
 		localStorage.setItem("cart", JSON.stringify(orderProducts));
 		setCartLength(orderProducts.length);
 		

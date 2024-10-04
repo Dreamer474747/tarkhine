@@ -95,10 +95,6 @@ export default function PersonalDataForm({ setFormControl } : PersonalDataFormPa
 	async function submitNewUserData(event?: React.FormEvent<HTMLFormElement>) {
 		event?.preventDefault();
 		
-		if (!email.trim()) {
-			return showSwal("ایمیل یک فیلد الزامی است", "error", "باشه");
-		}
-		
 		if (phoneNumber && `${phoneNumber}`.length < 11) {
 			return showSwal("فیلد شماره موبایل یا باید خالی باشد یا باید ۱۱ کارکتر داشته باشد", "error", "باشه");
 		}
@@ -113,7 +109,6 @@ export default function PersonalDataForm({ setFormControl } : PersonalDataFormPa
 		
 		formData.append("first_name", firstName);
 		formData.append("last_name", lastName);
-		formData.append("username", email);
 		formData.append("phone_number", phoneNumber.toString());
 		formData.append("nick_name", nickName);
 		formData.append("birth_date", birthdayInput ? (birthdayInput).toString() : "");
@@ -183,12 +178,11 @@ export default function PersonalDataForm({ setFormControl } : PersonalDataFormPa
 				${canChangeData ? "*:border-text" : ""}`}
 			>
                 <Input
-					disabled={!canChangeData}
+					disabled={true}
 					placeholder="ادرس ایمیل"
 					type="email"
 					className="lg:ml-4"
 					value={email}
-					onChange={(e) => setEmail(e.target.value)}
 				/>
                 <Input
 					disabled={!canChangeData}
