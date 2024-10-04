@@ -52,7 +52,7 @@ export default function Comment() {
 				<Image
 					width="16"
 					height="16"
-					src="/svgs/stars/Rate-4.svg"
+					src="/svgs/stars/rate-4.svg"
 					alt="rate-4"
 					className="ml-1 w-3 h-3 sm:w-4 sm:h-4"
 				/>

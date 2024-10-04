@@ -67,9 +67,11 @@ export default function OrderInfo({ totalPrice, totalOffPrice, branchCode, showA
 			if (hasCookie("refresh")) {
 				await refreshMyAccessToken(router);
 				sendReqToSubmitOrder();
-			
+				setIsPending(false);
+				
 			} else {
-				return showSwal("اول باید به اکانتتان ورود کنید", "error", "باشه");
+				setIsPending(false);
+				return showSwal("اول باید به اکانتتان وارد شوید", "error", "باشه");
 			}
 		}
 	}

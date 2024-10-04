@@ -59,7 +59,7 @@ wishlists, setWishlists}: ProductParams) {
 					<Image
 						width="115"
 						height="24"
-						src={`/svgs/stars/grouped/Rate-${rate}-desktop.png`}
+						src={`/svgs/stars/grouped/rate-${rate}-desktop.png`}
 						alt={`${rate}-star-rate`}
 						className="hidden md:block select-none w-[115px] lg--xl:w-[100px] xl--2xl:w-[115px]"
 					/>
@@ -68,7 +68,7 @@ wishlists, setWishlists}: ProductParams) {
 						<Image
 							width="16"
 							height="16"
-							src={`/svgs/stars/Rate-${rate}.svg`}
+							src={`/svgs/stars/rate-${rate}.svg`}
 							alt={`${rate}-star-rate`}
 							className="select-none"
 						/>

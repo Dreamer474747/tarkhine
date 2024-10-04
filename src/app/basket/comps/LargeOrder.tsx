@@ -144,7 +144,7 @@ calcTotalPrice, calcTotalOffPrice, deleteOrder }: LargeOrderParams) {
 						<Image
 							width="115"
 							height="24"
-							src={`/svgs/stars/grouped/Rate-${rate}-desktop.png`}
+							src={`/svgs/stars/grouped/rate-${rate}-desktop.png`}
 							alt={`${rate}-stars-rate`}
 							className="ml-2 lg--xl:ml-4"
 						/>

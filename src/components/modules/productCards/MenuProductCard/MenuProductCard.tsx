@@ -125,7 +125,7 @@ export default function MenuProductCard({ src, alt, name, ingredients, price, di
 					<Image
 						width="115"
 						height="24"
-						src={`/svgs/stars/grouped/Rate-${rate}-desktop.png`}
+						src={`/svgs/stars/grouped/rate-${rate}-desktop.png`}
 						alt={`${rate}-star-rate`}
 						className="hidden sm:block w-[90px] h-[20px] md:w-[115px] md:h-[24px]"
 					/>
@@ -133,7 +133,7 @@ export default function MenuProductCard({ src, alt, name, ingredients, price, di
 					<Image
 						width="80"
 						height="16"
-						src={`/svgs/stars/grouped/Rate-${rate}-mobile.png`}
+						src={`/svgs/stars/grouped/rate-${rate}-mobile.png`}
 						alt={`${rate}-star-rate`}
 						className="sm:hidden stars"
 					/>
