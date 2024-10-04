@@ -1,5 +1,4 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { deleteCookie } from "cookies-next";
@@ -20,14 +19,14 @@ import {
 
 export default function LogoutBtn({ text } : { text: string }) {
 	
-	const router = useRouter();
 	const [open, setOpen] = useState(false);
 	
 	
 	const logout = () => {
 		deleteCookie("token");
 		deleteCookie("refresh");
-		router.refresh();
+		setOpen(false);
+		location.reload();
 	}
 	
 	

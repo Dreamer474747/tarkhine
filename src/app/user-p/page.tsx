@@ -12,22 +12,16 @@ import { Button } from "ui/Button";
 export default function Page() {
 	
 	const [showContent, setShowContent] = useState(true);
-	const [phoneNumber, setPhoneNumber] = useState<number | string>("");
-	const [nickName, setNickName] = useState("");
+	const [formControl, setFormControl] = useState(false);
 	
 	
 	return (
 		
 		<div>
 			<div className="hidden md:flex">
-				<UserActions phoneNumber={phoneNumber} nickName={nickName} />
+				<UserActions formControl={formControl} />
 				<ContentWrapper title="پروفایل من">
-					<PersonalDataForm
-						phoneNumber={phoneNumber}
-						setPhoneNumber={setPhoneNumber}
-						nickName={nickName}
-						setNickName={setNickName}
-					/>
+					<PersonalDataForm setFormControl={setFormControl} />
 				</ContentWrapper>
 			</div>
 			
@@ -53,12 +47,7 @@ export default function Page() {
 								</h2>
 								
 							</div>
-							<PersonalDataForm
-								phoneNumber={phoneNumber}
-								setPhoneNumber={setPhoneNumber}
-								nickName={nickName}
-								setNickName={setNickName}
-							/>
+							<PersonalDataForm setFormControl={setFormControl} />
 						</div>
 					) : <UserActions setShowContent={setShowContent} />
 				}

@@ -9,7 +9,7 @@ import { Separator } from "ui/Separator";
 
 import type { Order as OrderType } from "u/types";
 
-import { refreshMyAccessToken } from "u/helpers";
+import { refreshMyAccessToken } from "m/helpers";
 
 import {
   Carousel,

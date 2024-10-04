@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, redirect } from "next/navigation";
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, useContext, Dispatch, SetStateAction } from "react";
 import { getCookie, hasCookie } from "cookies-next";
 
 import BirthDateInput from "./BirthDateInput";
@@ -8,29 +8,33 @@ import BirthDateInput from "./BirthDateInput";
 import { Input } from "ui/Input";
 import { Button } from "ui/Button";
 
-import { refreshMyAccessToken, showSwal } from "u/helpers";
+import { refreshMyAccessToken } from "m/helpers";
+import { showSwal } from "u/helpers";
 import { emailRegex } from "u/constants";
 
 import { EstedadMedium } from "@/app/Fonts";
 
 import type { Value } from "react-multi-date-picker";
 
+import { ServicesContext } from "@/components/contexts/ServicesProvider";
+import type { ServicesContextType } from "u/types";
+
 type PersonalDataFormParams = {
-	phoneNumber: string | number,
-	setPhoneNumber: Dispatch<SetStateAction<string | number>>,
-	nickName: string,
-	setNickName: Dispatch<SetStateAction<string>>,
+	setFormControl: Dispatch<SetStateAction<boolean>>,
 }
 
 
-export default function PersonalDataForm({ phoneNumber, setPhoneNumber, nickName, setNickName } : PersonalDataFormParams) {
+export default function PersonalDataForm({ setFormControl } : PersonalDataFormParams) {
 	
 	const router = useRouter();
+	const { isPending, setIsPending } = useContext(ServicesContext) as ServicesContextType;
 	
 	const [canChangeData, setCanChangeData] = useState(false);
 	
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState<number | string>("");
+	const [nickName, setNickName] = useState("");
 	const [email, setEmail] = useState("");
 	const [birthdayInput, setBirthdayInput] = useState<Value>(new Date());
 	
@@ -50,14 +54,38 @@ export default function PersonalDataForm({ phoneNumber, setPhoneNumber, nickName
 					}
 				});
 				
-				const data = await res.json();
-				console.log(data)
+				const { birth_date, first_name, last_name, nick_name, phone_number, username } = await res.json();
 				
-			} else {
+				if (first_name) {
+					setFirstName(first_name);
+				}
+				
+				if (last_name) {
+					setLastName(last_name);
+				}
+				
+				if (nick_name) {
+					setNickName(nick_name);
+				}
+				
+				if (phone_number) {
+					setPhoneNumber(phone_number);
+				}
+				
+				setEmail(username);
+				
+				if (birth_date) {
+					setBirthdayInput(new Date(birth_date));
+				}
+				
+			} else if (hasCookie("refresh")) {
 				await refreshMyAccessToken(router);
 				getUserData();
+			} else {
+				redirect("/");
 			}
 		}
+		
 		getUserData()
 		
 	}, [])
@@ -67,8 +95,12 @@ export default function PersonalDataForm({ phoneNumber, setPhoneNumber, nickName
 	async function submitNewUserData(event?: React.FormEvent<HTMLFormElement>) {
 		event?.preventDefault();
 		
-		if (!firstName.trim() || !lastName.trim() || !email.trim() || !(`${phoneNumber}`).trim()) {
-			return showSwal("یکی از فیلدهای اجباری خالی است", "error", "باشه");
+		if (!email.trim()) {
+			return showSwal("ایمیل یک فیلد الزامی است", "error", "باشه");
+		}
+		
+		if (phoneNumber && `${phoneNumber}`.length < 11) {
+			return showSwal("فیلد شماره موبایل یا باید خالی باشد یا باید ۱۱ کارکتر داشته باشد", "error", "باشه");
 		}
 		
 		const isEmailValid = email.match(emailRegex);
@@ -76,44 +108,47 @@ export default function PersonalDataForm({ phoneNumber, setPhoneNumber, nickName
 			return showSwal("ایمیل وارد شده معتبر نیست", "error", "باشه");
 		}
 		
-		const userData = {
-			first_name: firstName,
-			last_name: lastName,
-			username: email,
-			phone_number: phoneNumber,
-			nick_name: nickName,
-			birth_date: birthdayInput
-		}
+		
+		const formData = new FormData();
+		
+		formData.append("first_name", firstName);
+		formData.append("last_name", lastName);
+		formData.append("username", email);
+		formData.append("phone_number", phoneNumber.toString());
+		formData.append("nick_name", nickName);
+		formData.append("birth_date", birthdayInput ? (birthdayInput).toString() : "");
 		
 		const token = getCookie("token");
+		setIsPending(true);
+		
 		if (token) {
+			
 			const res = await fetch(`${process.env.BASE_URL}/profile/edit/`, {
 				method: "PUT",
 				headers: {
 					"Authorization": `Bearer ${token}`
 				},
-				body: JSON.stringify({ userData })
+				body: formData
 			});
 			
-			console.log(res)
-			const data = await res.json();
-			console.log(data);
+			if (res.status === 202) {
+				showSwal("اطلاعات شما با موفقیت ثبت شد", "success", "عالی");
+				setFormControl((prev: boolean) => !prev);
+			} else {
+				const data = await res.json();
+				console.log(data)
+				// showSwal("", "error", "ا");
+			}
+			setIsPending(false);
 		
 		} else if (hasCookie("refresh")) {
 			await refreshMyAccessToken(router);
 			submitNewUserData();
+			setIsPending(false);
 		} else {
 			redirect("/");
+			setIsPending(false);
 		}
-		
-		/*
-			birth_date: Sun Sep 29 2024 21:07:59 GMT+0330 (Iran Standard Time) {}
-			first_name: "۱۱۱۱۱۱۱۱۱"
-			last_name: "۲۲۲۲۲۲۲۲۲۲۲۲"
-			nick_name: ""
-			phone_number: "432432432"
-			username: "sjkfhj@fkjsl.com"
-		*/
 	}
 	
 	
@@ -197,6 +232,7 @@ export default function PersonalDataForm({ phoneNumber, setPhoneNumber, nickName
 						</Button>
 						<Button
 							type="submit"
+							disabled={isPending}
 							className={`border border-primary hover:bg-[] md:mr-4
 							w-[48%] md:w-[150px] h-8 sm:h-10 rounded
 							text-xs sm:text-sm md:text-base`}

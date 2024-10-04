@@ -1,9 +1,13 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
+import { getCookie } from "cookies-next";
+
+import { refreshMyAccessToken } from "m/helpers";
 
 import LogoutBtn from "m/LogoutBtn";
 
@@ -11,14 +15,52 @@ import { Separator } from "ui/Separator";
 
 type UserActionsParams = {
 	setShowContent?: Dispatch<SetStateAction<boolean>>,
-	phoneNumber?: string | number,
-	nickName?: string
+	formControl?: boolean,
 }
 
 
-export default function UserActions({ setShowContent, phoneNumber, nickName }: UserActionsParams) {
+export default function UserActions({ setShowContent, formControl }: UserActionsParams) {
+	
+	const router = useRouter();
 	
 	const pathname = usePathname();
+	
+	const [nickName, setNickName] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
+	
+	useEffect(() => {
+		
+		const getUserData = async () => {
+			
+			const token = getCookie("token");
+			if (token) {
+				
+				const res = await fetch(`${process.env.BASE_URL}/profile/user-detail/`, {
+					method: "GET",
+					headers: {
+						"Authorization": `Bearer ${token}`
+					}
+				});
+				
+				const { nick_name, phone_number } = await res.json();
+				
+				if (nick_name) {
+					setNickName(nick_name);
+				}
+				
+				if (phone_number) {
+					setPhoneNumber(phone_number);
+				}
+				
+			} else {
+				await refreshMyAccessToken(router);
+				getUserData();
+			}
+		}
+		
+		getUserData()
+		
+	}, [formControl])
 	
 	
 	return (

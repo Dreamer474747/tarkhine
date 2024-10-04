@@ -12,7 +12,7 @@ import WishlistProduct from "m/productCards/WishlistProduct/WishlistProduct";
 import { ProductsContext } from "@/components/contexts/ProductsProvider";
 import type { ProductsContextType, Product } from "u/types";
 
-import { refreshMyAccessToken } from "u/helpers";
+import { refreshMyAccessToken } from "m/helpers";
 
 import { EstedadSemiBold, EstedadMedium } from "@/app/Fonts";
 
