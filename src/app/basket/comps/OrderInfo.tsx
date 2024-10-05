@@ -55,6 +55,7 @@ export default function OrderInfo({ totalPrice, totalOffPrice, branchCode, showA
 					buttons: ["عالی", "بازگشت"],
 				}).then(async (result) => {
 					localStorage.clear();
+					setIsPending(false);
 					location.reload();
 				});
 				
@@ -64,23 +65,21 @@ export default function OrderInfo({ totalPrice, totalOffPrice, branchCode, showA
 			}
 		
 		} else {
-			if (hasCookie("refresh")) {
-				await refreshMyAccessToken(router);
-				sendReqToSubmitOrder();
-				setIsPending(false);
-				
-			} else {
-				setIsPending(false);
-				return showSwal("اول باید به اکانتتان وارد شوید", "error", "باشه");
-			}
+			
+			await refreshMyAccessToken(router);
+			sendReqToSubmitOrder();
+			setIsPending(false);
 		}
 	}
 	
 	const submitOrder = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		
-		if (!showAddressInfo) {
-			return showSwal("هنوز ادرس خود را وارد نکرده‌اید", "error", "باشه");
+		if (!hasCookie("refresh")) {
+			return showSwal("اول باید به اکانتتان وارد شوید", "error", "باشه");
+			
+		} else if (!showAddressInfo) {
+			return showSwal("هنوز ادرس خود را ثبت نکرده‌اید", "error", "باشه");
 		}
 		
 		const cart = JSON.parse(localStorage.getItem("cart") || "[]");

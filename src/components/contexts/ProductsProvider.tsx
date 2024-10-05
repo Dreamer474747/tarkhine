@@ -1,12 +1,18 @@
 "use client";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 
 import type { Product, ProductsContextType } from "u/types";
 
 
 export const ProductsContext = createContext<ProductsContextType | null>(null);
 
+import { ServicesContext } from "@/components/contexts/ServicesProvider";
+import type { ServicesContextType } from "u/types";
+
+
 export default function ProductsProvider({ children }: { children: React.ReactNode }) {
+	
+	const { setIsPending } = useContext(ServicesContext) as ServicesContextType;
 	
 	const [products, setProducts] = useState([]);
 	const [nonIranianProducts, setNonIranianProducts] = useState([]);
@@ -18,6 +24,8 @@ export default function ProductsProvider({ children }: { children: React.ReactNo
 		
 		const getProducts = async () => {
 			
+			// setIsPending(true); initial value of isPending is true
+			
 			const res = await fetch(`${process.env.BASE_URL}/product/list`)
 			const data = await res.json();
 			
@@ -28,6 +36,8 @@ export default function ProductsProvider({ children }: { children: React.ReactNo
 			
 			const iranianFoods = data.filter((food: Product) => food.food_subcategory.title === "غذا های ایرانی");
 			setIranianProducts(iranianFoods);
+			
+			setIsPending(false);
 			
 		}
 		

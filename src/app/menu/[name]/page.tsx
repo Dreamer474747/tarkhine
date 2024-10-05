@@ -5,6 +5,9 @@ import { usePathname } from "next/navigation";
 
 import { useContext } from "react";
 
+import { ServicesContext } from "@/components/contexts/ServicesProvider";
+import type { ServicesContextType } from "u/types";
+
 import { ProductsContext } from "@/components/contexts/ProductsProvider";
 import type { ProductsContextType, Product } from "u/types";
 
@@ -25,6 +28,8 @@ export default function Page({ params }: PageParamsType) {
 	
 	const pathname = usePathname();
 	const { products } = useContext(ProductsContext) as ProductsContextType;
+	
+	const { isPending } = useContext(ServicesContext) as ServicesContextType;
 	
 	let menuTitle = "";
 	let allProducts: Product[] = [];
@@ -54,10 +59,18 @@ export default function Page({ params }: PageParamsType) {
 				
 				<MenuLinkItems />
 				
-				<MenuItems
-					title={menuTitle}
-					products={allProducts}
-				/>
+				{
+					isPending ? (
+						<div className={`text-center ${EstedadBold} my-10`} >
+							در حال دریافت اطلاعات...
+						</div>
+					) : (
+						<MenuItems
+							title={menuTitle}
+							products={allProducts}
+						/>
+					)
+				}
 				
 			</main>
 			

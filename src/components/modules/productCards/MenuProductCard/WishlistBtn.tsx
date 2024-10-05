@@ -2,9 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 
-import { showSwal } from "u/helpers";
-import { getCookie, hasCookie } from "cookies-next";
-import { refreshMyAccessToken, addToWishlist } from "m/helpers";
+import { addToWishlist } from "m/helpers";
 
 import { Button } from "ui/Button";
 

@@ -8,7 +8,7 @@ export const ServicesContext = createContext<ServicesContextType | null>(null);
 
 export default function ServicesProvider({ children }: { children: React.ReactNode }) {
 	
-	const [isPending, setIsPending] = useState(false);
+	const [isPending, setIsPending] = useState(true);
 	
 	return (
 		<ServicesContext.Provider value={{ isPending, setIsPending }}>

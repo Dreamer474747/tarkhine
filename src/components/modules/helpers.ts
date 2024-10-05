@@ -15,7 +15,7 @@ const refreshMyAccessToken = async (router: any) => {
 	
 	if (res.status === 200) {
 		const data = await res.json();
-		setCookie("token", data.access, { maxAge: 60 });
+		setCookie("token", data.access, { maxAge: 120 });
 		router.refresh();
 	}
 }
