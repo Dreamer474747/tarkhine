@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Tarkhine | Food ordering Website
 
-## Getting Started
+this project is created using Next.js, TypeScript and Shadcn for the front-end and Django, Django Rest Framework and sqlite3 for the back-end.
 
-First, run the development server:
+# Credit
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+ui of this project is made by this creator: [figma page](https://www.figma.com/design/pc9giRPG3qoXNf61m7305n/Tarkhineh-%7C-Food-ordering-Website-%26-Application-(Community)?node-id=52-7&node-type=canvas&t=93ZXOJQsyf8u2G9E-0)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1.Responsive design that adapts to different screen sizes and devices
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### 2.Adding favorite products to the favorite products section
 
-## Learn More
+### 3.Search option that allows users to find products by name
 
-To learn more about Next.js, take a look at the following resources:
+### 4.Filtering products by their different types
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 5.Payment processing (simulated)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# Installation
 
-## Deploy on Vercel
+To run this project locally, you need to have Node.js and npm installed on your machine. You also need to install the dependencies by running the following command in the project directory:
+*npm install*
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Demo
+You can view a live demo of the website here: [Demo](https://tarkhine-website.liara.run/)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# Collaborator
+this project was not possible without the help of my colleague [Armin-kosary](https://github.com/Armin-kosary)
+
+# License
+This project is licensed under the GPL-2.0 license.
